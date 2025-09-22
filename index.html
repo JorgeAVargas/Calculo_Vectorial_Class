@@ -1,48 +1,38 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Repaso de Cálculo Multivariable con Tutor IA</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-body {
-font-family: 'Inter', sans-serif;
-}
+body { font-family: 'Inter', sans-serif; }
 .quiz-container {
-border: 1px solid #e2e8f0;
-border-radius: 0.75rem;
-box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  overflow: hidden;
 }
-.answer-btn {
-transition: background-color 0.2s, border-color 0.2s;
-}
+.answer-btn { transition: background-color 0.2s, border-color 0.2s; }
 .answer-btn.correct {
-background-color: #dcfce7 !important;
-border-color: #22c55e !important;
-color: #166534 !important;
+  background-color: #dcfce7 !important;
+  border-color: #22c55e !important;
+  color: #166534 !important;
 }
 .answer-btn.incorrect {
-background-color: #fee2e2 !important;
-border-color: #ef4444 !important;
-color: #991b1b !important;
+  background-color: #fee2e2 !important;
+  border-color: #ef4444 !important;
+  color: #991b1b !important;
 }
-.answer-btn:disabled {
-cursor: not-allowed;
-}
-@keyframes spin {
-to { transform: rotate(360deg); }
-}
+.answer-btn:disabled { cursor: not-allowed; }
+@keyframes spin { to { transform: rotate(360deg); } }
 .spinner {
-border: 4px solid rgba(0, 0, 0, 0.1);
-border-left-color: #4f46e5;
-border-radius: 50%;
-width: 40px;
-height: 40px;
-animation: spin 1s linear infinite;
+  border: 4px solid rgba(0,0,0,0.1);
+  border-left-color: #4f46e5;
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  animation: spin 1s linear infinite;
 }
 #aiResponse p { margin-bottom: 1rem; }
 #aiResponse h3 { font-size: 1.25rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem; }
@@ -54,255 +44,496 @@ animation: spin 1s linear infinite;
 <body class="bg-gray-50 text-gray-800">
 
 <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-4xl">
-    <header class="text-center mb-8">
-        <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">Clase de Repaso de Cálculo Multivariable</h1>
-        <p class="mt-2 text-lg text-gray-600">¡Pon a prueba tus conocimientos y resuelve tus dudas con el Tutor de IA!</p>
-    </header>
+  <header class="text-center mb-8">
+    <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">Clase de Repaso de Cálculo Multivariable</h1>
+    <p class="mt-2 text-lg text-gray-600">¡Pon a prueba tus conocimientos y resuelve tus dudas con el Tutor de IA!</p>
+  </header>
 
-    <main>
-        <div class="bg-white p-6 sm:p-8 rounded-lg shadow-md mb-8">
-            <h2 class="text-2xl font-semibold mb-6">Examen Interactivo de Práctica</h2>
-            <p class="mb-6">Responde las siguientes 20 preguntas (10 de teoría y 10 de práctica) para evaluar tu comprensión de los conceptos clave. ¡Mucho éxito!</p>
-            <div id="quiz-app" class="quiz-container p-6">
-                <div id="question-container" class="mb-4">
-                    <p id="question-text" class="text-lg font-semibold text-gray-900"></p>
-                </div>
-                <div id="answer-options" class="grid grid-cols-1 gap-4">
-                    <!-- Botones de respuesta se insertarán aquí -->
-                </div>
-                <div id="feedback-container" class="mt-4 text-sm text-gray-600">
-                     <p id="rationale-text"></p>
-                </div>
-                <div class="mt-6 flex justify-between items-center">
-                    <p id="progress-text" class="text-sm text-gray-500"></p>
-                    <button id="next-btn" class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition hidden">Siguiente</button>
-                </div>
-                <div id="results-container" class="hidden text-center">
-                    <h3 class="text-2xl font-bold">¡Examen completado!</h3>
-                    <p id="score-text" class="text-xl mt-4"></p>
-                    <button id="restart-btn" class="mt-6 px-6 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700">Intentar de Nuevo</button>
-                </div>
-            </div>
+  <main>
+    <!-- Examen Interactivo -->
+    <div class="bg-white p-6 sm:p-8 rounded-lg shadow-md mb-8">
+      <h2 class="text-2xl font-semibold mb-6">Examen Interactivo de Práctica</h2>
+      <p class="mb-6">Responde las siguientes 20 preguntas (10 de teoría y 10 de práctica) para evaluar tu comprensión. ¡Mucho éxito!</p>
+      <div id="quiz-app" class="quiz-container p-6">
+        <div id="question-container" class="mb-4">
+          <p id="question-text" class="text-lg font-semibold text-gray-900"></p>
         </div>
+        <div id="answer-options" class="grid grid-cols-1 gap-4"></div>
+        <div id="feedback-container" class="mt-4 text-sm text-gray-700">
+          <p id="rationale-text"></p>
+        </div>
+        <div class="mt-6 flex justify-between items-center">
+          <p id="progress-text" class="text-sm text-gray-500"></p>
+          <button id="next-btn"
+                  class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hidden">
+            Siguiente
+          </button>
+        </div>
+        <div id="results-container" class="hidden text-center">
+          <h3 class="text-2xl font-bold">¡Examen completado!</h3>
+            <p id="score-text" class="text-xl mt-4"></p>
+            <button id="restart-btn"
+                    class="mt-6 px-6 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700">
+              Intentar de Nuevo
+            </button>
+        </div>
+      </div>
+    </div>
 
-        <div id="ai-tutor" class="bg-white p-6 sm:p-8 rounded-lg shadow-md">
-            <h2 class="text-2xl font-semibold mb-2 flex items-center">
-                <span class="text-2xl mr-2">✨</span> Tutor de Cálculo con IA
-            </h2>
-            <p class="mb-6 text-gray-600">¿Atascado en alguna pregunta? Pégala aquí o escribe un concepto para obtener una explicación detallada o un problema similar para practicar.</p>
-            <div class="mb-4">
-                <label for="ai-prompt" class="block text-sm font-medium text-gray-700 mb-2">Pregunta o Concepto:</label>
-                <textarea id="ai-prompt" rows="4" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" placeholder="Ej: '¿Cuál es la diferencia entre convergencia absoluta y condicional?' o pega una pregunta completa del examen."></textarea>
-            </div>
-            <div class="flex flex-col sm:flex-row gap-4">
-                <button id="explain-btn" class="flex-1 inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
-                    Explicar el Concepto
-                </button>
-                <button id="generate-btn" class="flex-1 inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
-                    Generar Problema Similar
-                </button>
-            </div>
-            <div id="ai-response-container" class="mt-8 p-6 bg-gray-50 rounded-lg border border-gray-200 min-h-[100px]">
-                <div id="ai-loading" class="hidden flex flex-col items-center justify-center text-gray-500">
-                    <div class="spinner"></div>
-                    <p class="mt-3">El Tutor IA está pensando...</p>
-                </div>
-                <div id="aiResponse" class="text-gray-800">
-                    <p class="text-gray-500">La respuesta de la IA aparecerá aquí.</p>
-                </div>
-            </div>
+    <!-- Tutor IA -->
+    <div id="ai-tutor" class="bg-white p-6 sm:p-8 rounded-lg shadow-md">
+      <h2 class="text-2xl font-semibold mb-2 flex items-center">
+        <span class="text-2xl mr-2">✨</span> Tutor de Cálculo con IA
+      </h2>
+      <p class="mb-6 text-gray-600">Pega una pregunta del examen o escribe un concepto para obtener explicación o un problema nuevo.</p>
+
+      <div class="mb-4">
+        <label for="ai-prompt" class="block text-sm font-medium text-gray-700 mb-2">Pregunta o Concepto:</label>
+        <textarea id="ai-prompt" rows="4"
+                  class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                  placeholder="Ej: ‘¿Cuál es la diferencia entre convergencia absoluta y condicional?’"></textarea>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4">
+        <button id="explain-btn"
+                class="flex-1 inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
+          Explicar el Concepto
+        </button>
+        <button id="generate-btn"
+                class="flex-1 inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50">
+          Generar Problema Similar
+        </button>
+        <button id="clear-ai-btn"
+                class="flex-1 inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-rose-500 hover:bg-rose-600">
+          Limpiar Respuesta
+        </button>
+      </div>
+
+      <div class="mt-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1" for="apiKeyInput">API Key (temporal para pruebas)</label>
+        <input id="apiKeyInput" type="password" placeholder="Pega aquí tu API key (no la subas al repo)"
+               class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"/>
+        <button id="saveKeyBtn"
+                class="mt-2 px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 text-sm">
+          Guardar en esta sesión
+        </button>
+        <p id="apiKeyStatus" class="text-xs text-gray-500 mt-1"></p>
+      </div>
+
+      <div id="ai-response-container" class="mt-8 p-6 bg-gray-50 rounded-lg border border-gray-200 min-h-[120px]">
+        <div id="ai-loading" class="hidden flex flex-col items-center justify-center text-gray-500">
+          <div class="spinner"></div>
+          <p class="mt-3">El Tutor IA está pensando...</p>
         </div>
-    </main>
+        <div id="aiResponse" class="text-gray-800">
+          <p class="text-gray-500">La respuesta de la IA aparecerá aquí.</p>
+        </div>
+      </div>
+      <p class="mt-4 text-xs text-gray-500">
+        Nota: Para producción, usa un backend proxy para proteger tu API key. Este campo es solo para pruebas locales.
+      </p>
+    </div>
+  </main>
 </div>
 
 <script>
-// --- Lógica del Tutor IA ---
+/* ===================== Tutor IA ===================== */
 const explainBtn = document.getElementById('explain-btn');
 const generateBtn = document.getElementById('generate-btn');
+const clearAiBtn = document.getElementById('clear-ai-btn');
 const promptTextarea = document.getElementById('ai-prompt');
 const aiResponseDiv = document.getElementById('aiResponse');
 const loadingDiv = document.getElementById('ai-loading');
+const apiKeyInput = document.getElementById('apiKeyInput');
+const saveKeyBtn = document.getElementById('saveKeyBtn');
+const apiKeyStatus = document.getElementById('apiKeyStatus');
 
-const API_KEY = &quot;&quot;;
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
+const MODEL = "gemini-1.5-flash-latest";
+
+// Guardar / cargar API key en sessionStorage
+function loadApiKey() {
+  const k = sessionStorage.getItem('GEMINI_API_KEY');
+  if (k) {
+    apiKeyStatus.textContent = "API key cargada en memoria (no se guarda permanentemente).";
+  } else {
+    apiKeyStatus.textContent = "Introduce tu API key para habilitar el Tutor.";
+  }
+  return k || "";
+}
+let API_KEY = loadApiKey();
+
+saveKeyBtn.addEventListener('click', () => {
+  if (!apiKeyInput.value.trim()) {
+    apiKeyStatus.textContent = "API key vacía.";
+    apiKeyStatus.classList.add('text-red-500');
+    return;
+  }
+  sessionStorage.setItem('GEMINI_API_KEY', apiKeyInput.value.trim());
+  API_KEY = apiKeyInput.value.trim();
+  apiKeyInput.value = "";
+  apiKeyStatus.textContent = "API key guardada temporalmente. (No recargues para mantenerla)";
+  apiKeyStatus.classList.remove('text-red-500');
+  apiKeyStatus.classList.add('text-emerald-600');
+});
 
 function simpleMarkdownToHtml(text) {
-    text = text.replace(/\*\*(.*?)\*\*/g, &#39;&lt;strong&gt;$1&lt;/strong&gt;&#39;);
-    text = text.replace(/^### (.*$)/gim, &#39;&lt;h3&gt;$1&lt;/h3&gt;&#39;);
-    text = text.replace(/^\* (.*$)/gim, &#39;&lt;li&gt;$1&lt;/li&gt;&#39;);
-    text = text.replace(/(&lt;\/li&gt;)?\n?&lt;li&gt;/g, &#39;&lt;li&gt;&#39;);
-    text = text.replace(/(&lt;li&gt;.*&lt;\/li&gt;)/gs, &#39;&lt;ul&gt;$1&lt;/ul&gt;&#39;);
-    text = text.split(&#39;\n&#39;).map(p =&gt; p.trim() ? `&lt;p&gt;${p}&lt;/p&gt;` : &#39;&#39;).join(&#39;&#39;);
-    text = text.replace(/&lt;p&gt;&lt;\/p&gt;/g, &#39;&#39;);
-    text = text.replace(/&lt;p&gt;&lt;ul&gt;/g, &#39;&lt;ul&gt;&#39;).replace(/&lt;\/ul&gt;&lt;\/p&gt;/g, &#39;&lt;/ul&gt;&#39;);
-    return text;
+  if (!text) return "";
+  // Escapar básico para evitar inyección (modelo no debe devolver HTML, pero por seguridad)
+  text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  // Negritas
+  text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  // Títulos (solo nivel 3 sencillo)
+  text = text.replace(/^### (.*)$/gim, '<h3>$1</h3>');
+  // Listas (líneas que empiezan con - o * )
+  const lines = text.split(/\r?\n/);
+  let inList = false;
+  let html = "";
+  for (const line of lines) {
+    if (/^\s*([-*])\s+/.test(line)) {
+      if (!inList) {
+        inList = true;
+        html += "<ul>";
+      }
+      html += `<li>${line.replace(/^\s*[-*]\s+/, '')}</li>`;
+    } else {
+      if (inList) {
+        inList = false;
+        html += "</ul>";
+      }
+      if (line.trim()) {
+        html += `<p>${line}</p>`;
+      }
+    }
+  }
+  if (inList) html += "</ul>";
+  return html;
 }
 
 async function callGeminiAPI(prompt, maxRetries = 3) {
-    loadingDiv.classList.remove(&#39;hidden&#39;);
-    aiResponseDiv.innerHTML = &#39;&#39;;
-    const payload = { contents: [{ parts: [{ text: prompt }] }] };
+  if (!API_KEY) {
+    aiResponseDiv.innerHTML = '<p class="text-red-500">Falta la API key. Insértala antes de usar el Tutor.</p>';
+    return;
+  }
+  loadingDiv.classList.remove('hidden');
+  aiResponseDiv.innerHTML = '';
 
-    for (let attempt = 0; attempt &lt; maxRetries; attempt++) {
-        try {
-            const response = await fetch(API_URL, {
-                method: &#39;POST&#39;,
-                headers: { &#39;Content-Type&#39;: &#39;application/json&#39; },
-                body: JSON.stringify(payload),
-            });
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            const result = await response.json();
-            loadingDiv.classList.add(&#39;hidden&#39;);
-            if (result.candidates &amp;&amp; result.candidates[0].content &amp;&amp; result.candidates[0].content.parts[0].text) {
-                const rawText = result.candidates[0].content.parts[0].text;
-                aiResponseDiv.innerHTML = simpleMarkdownToHtml(rawText);
-            } else {
-                aiResponseDiv.innerHTML = &#39;&lt;p class=&quot;text-red-500&quot;&gt;No se pudo obtener una respuesta válida de la IA. Por favor, intenta de nuevo.&lt;/p&gt;&#39;;
-            }
-            return;
-        } catch (error) {
-            console.error(&#39;Error calling Gemini API:&#39;, error);
-            if (attempt === maxRetries - 1) {
-                loadingDiv.classList.add(&#39;hidden&#39;);
-                aiResponseDiv.innerHTML = `&lt;p class=&quot;text-red-500&quot;&gt;Error al comunicarse con el Tutor IA. Revisa la consola.&lt;/p&gt;`;
-            } else {
-                const delay = Math.pow(2, attempt) * 1000;
-                await new Promise(res =&gt; setTimeout(res, delay));
-            }
-        }
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${API_KEY}`;
+  const payload = { contents: [{ parts: [{ text: prompt }]}] };
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      loadingDiv.classList.add('hidden');
+
+      const candidate = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!candidate) {
+        aiResponseDiv.innerHTML = '<p class="text-red-500">Respuesta vacía del modelo.</p>';
+        return;
+      }
+      aiResponseDiv.innerHTML = simpleMarkdownToHtml(candidate);
+      return;
+    } catch (err) {
+      if (attempt === maxRetries - 1) {
+        loadingDiv.classList.add('hidden');
+        aiResponseDiv.innerHTML = `<p class="text-red-500">Error al comunicar con la API (${err.message}). Intenta más tarde.</p>`;
+      } else {
+        await new Promise(r => setTimeout(r, (2 ** attempt) * 1000));
+      }
     }
+  }
 }
 
-explainBtn.addEventListener(&#39;click&#39;, () =&gt; {
-    const userInput = promptTextarea.value;
-    if (!userInput.trim()) return;
-    const prompt = `Eres un profesor de cálculo multivariable experto. Explica el concepto clave detrás del siguiente tema de forma clara y paso a paso. Tema: &quot;${userInput}&quot;`;
-    callGeminiAPI(prompt);
+explainBtn.addEventListener('click', () => {
+  const userInput = promptTextarea.value.trim();
+  if (!userInput) return;
+  const prompt = `Eres un profesor experto de cálculo multivariable. Explica con pasos claros y ejemplos el siguiente concepto o pregunta: "${userInput}". Incluye: 1) Definición, 2) Contexto, 3) Ejemplo práctico, 4) Errores comunes.`;
+  callGeminiAPI(prompt);
 });
 
-generateBtn.addEventListener(&#39;click&#39;, () =&gt; {
-    const userInput = promptTextarea.value;
-    if (!userInput.trim()) return;
-    const prompt = `Eres un profesor de cálculo multivariable. Genera un nuevo problema de práctica similar en concepto y dificultad a la siguiente pregunta, pero con diferentes números. Proporciona el problema, 4 opciones (una correcta) y la solución explicada. Pregunta Original: &quot;${userInput}&quot;`;
-    callGeminiAPI(prompt);
+generateBtn.addEventListener('click', () => {
+  const userInput = promptTextarea.value.trim();
+  if (!userInput) return;
+  const prompt = `Eres profesor de cálculo multivariable. Genera un nuevo problema similar al siguiente (no lo copies), con distinta notación y números. Luego da: 1) Enunciado claro, 2) Pistas graduadas, 3) Solución paso a paso, 4) Variación adicional. Pregunta original: "${userInput}".`;
+  callGeminiAPI(prompt);
 });
 
-// --- Lógica del Examen Interactivo ---
+clearAiBtn.addEventListener('click', () => {
+  aiResponseDiv.innerHTML = '<p class="text-gray-500">La respuesta de la IA aparecerá aquí.</p>';
+});
+
+/* ===================== Examen Interactivo ===================== */
 const quizData = [
-    // Preguntas de Teoría
-    { question: &quot;¿Cuál es la condición necesaria, pero no suficiente, para la convergencia de una serie infinita &amp;Sigma;a_n?&quot;, options: [{ text: &quot;a_n debe ser decreciente.&quot;, isCorrect: false, rationale: &quot;Esta es una condición para el Criterio de la Serie Alternada, no una condición general.&quot; },{ text: &quot;lim(n&amp;rarr;&amp;infin;) a_n = 0.&quot;, isCorrect: true, rationale: &quot;Correcto. Si los términos no tienden a cero, la suma no puede converger.&quot; },{ text: &quot;La sucesión de sumas parciales debe estar acotada.&quot;, isCorrect: false, rationale: &quot;Si los términos son positivos, esta condición es suficiente, pero no es la más fundamental.&quot; },{ text: &quot;a_n &gt; 0 para todo n.&quot;, isCorrect: false, rationale: &quot;Esto describe un tipo de serie, pero no es una condición de convergencia.&quot; } ] },
-    { question: &quot;¿Cuál es la interpretación geométrica de |u &amp;middot; v|?&quot;, options: [ { text: &quot;El área del paralelogramo.&quot;, isCorrect: false, rationale: &quot;Eso corresponde a la magnitud del producto vectorial.&quot; }, { text: &quot;La longitud de la proyección de u sobre v, multiplicada por la magnitud de v.&quot;, isCorrect: true, rationale: &quot;Correcto. Basado en la fórmula |u &amp;middot; v| = ||u|| ||v|| |cos(&amp;theta;)|.&quot; }, { text: &quot;El volumen del paralelepípedo.&quot;, isCorrect: false, rationale: &quot;Eso corresponde al producto triple escalar.&quot; }, { text: &quot;El ángulo entre los vectores.&quot;, isCorrect: false, rationale: &quot;El producto escalar ayuda a encontrar el ángulo, pero no es el ángulo.&quot; } ] },
-    { question: &quot;¿Diferencia principal entre serie de Taylor y de Maclaurin?&quot;, options: [ { text: &quot;Taylor es solo para polinomios.&quot;, isCorrect: false, rationale: &quot;Taylor puede representar muchas funciones.&quot; }, { text: &quot;Maclaurin es una serie de Taylor centrada en c=0.&quot;, isCorrect: true, rationale: &quot;Correcto. Maclaurin es un caso especial de Taylor.&quot; }, { text: &quot;Maclaurin es siempre finita.&quot;, isCorrect: false, rationale: &quot;Ambas son, en general, infinitas.&quot; }, { text: &quot;Taylor converge más rápido.&quot;, isCorrect: false, rationale: &quot;La convergencia depende de la función, no del tipo de serie.&quot; } ] },
-    { question: &quot;Si u &amp;middot; (v &amp;times; w) = 0, ¿qué se concluye geométricamente?&quot;, options: [ { text: &quot;Los tres vectores son ortogonales.&quot;, isCorrect: false, rationale: &quot;No necesariamente. Solo se necesita que sean coplanares.&quot; }, { text: &quot;Los tres vectores son coplanares.&quot;, isCorrect: true, rationale: &quot;Correcto. El volumen del paralelepípedo que forman es cero.&quot; }, { text: &quot;Los tres vectores son paralelos.&quot;, isCorrect: false, rationale: &quot;Es una posibilidad, pero no la única.&quot; }, { text: &quot;Al menos un vector es nulo.&quot;, isCorrect: false, rationale: &quot;Es una forma de obtener cero, pero no la única.&quot; } ] },
-    { question: &quot;¿Verdadero o Falso? Toda serie que converge absolutamente también converge condicionalmente.&quot;, options: [ { text: &quot;Verdadero.&quot;, isCorrect: false, rationale: &quot;La convergencia condicional requiere que la serie de valores absolutos diverja.&quot; }, { text: &quot;Falso.&quot;, isCorrect: true, rationale: &quot;Correcto. Si converge absolutamente, simplemente converge.&quot; } ] },
-    { question: &quot;¿En qué superficies es más útil usar coordenadas esféricas?&quot;, options: [ { text: &quot;En superficies con simetría respecto a un punto (esferas, conos).&quot;, isCorrect: true, rationale: &quot;Correcto. Estas formas se describen con ecuaciones simples en esféricas.&quot; }, { text: &quot;En superficies con simetría cilíndrica (tubos).&quot;, isCorrect: false, rationale: &quot;Para estas, las coordenadas cilíndricas son mejores.&quot; }, { text: &quot;En superficies planas.&quot;, isCorrect: false, rationale: &quot;Para planos, las cartesianas son las más directas.&quot; }, { text: &quot;En la descripción de hélices.&quot;, isCorrect: false, rationale: &quot;Las hélices se describen mejor con cilíndricas.&quot; } ] },
-    { question: &quot;¿Qué establece el Teorema de la Serie Alternada?&quot;, options: [ { text: &quot;Si los términos decrecen en magnitud y su límite es cero, la serie converge.&quot;, isCorrect: true, rationale: &quot;Correcto. Esas son las dos condiciones exactas.&quot; }, { text: &quot;Si los términos se acercan a cero, la serie converge.&quot;, isCorrect: false, rationale: &quot;Incompleto. Falta la condición de que los términos deben ser decrecientes.&quot; }, { text: &quot;Si los términos son siempre positivos, la serie converge.&quot;, isCorrect: false, rationale: &quot;Esto no aplica a series alternadas.&quot; }, { text: &quot;Toda serie alternada converge.&quot;, isCorrect: false, rationale: &quot;Falso, se deben cumplir las condiciones.&quot; } ] },
-    { question: &quot;¿Qué propiedad distingue al producto vectorial del escalar?&quot;, options: [ { text: &quot;El producto escalar da un vector, el vectorial un escalar.&quot;, isCorrect: false, rationale: &quot;Es al revés.&quot; }, { text: &quot;El producto escalar solo se define en 3D.&quot;, isCorrect: false, rationale: &quot;El producto escalar se define en cualquier dimensión.&quot; }, { text: &quot;El escalar es conmutativo, el vectorial no.&quot;, isCorrect: true, rationale: &quot;Correcto. u &amp;middot; v = v &amp;middot; u, pero u &amp;times; v = -(v &amp;times; u).&quot; }, { text: &quot;El vectorial siempre da un vector de mayor magnitud.&quot;, isCorrect: false, rationale: &quot;La magnitud depende del seno del ángulo.&quot; } ] },
-    { question: &quot;¿Cuál es el propósito de usar la serie de Taylor de una función?&quot;, options: [ { text: &quot;Encontrar sus raíces exactas.&quot;, isCorrect: false, rationale: &quot;No es su propósito principal.&quot; }, { text: &quot;Determinar si es par o impar.&quot;, isCorrect: false, rationale: &quot;Puede revelar simetría, pero no es su propósito.&quot; }, { text: &quot;Representarla como un polinomio infinito y aproximarla.&quot;, isCorrect: true, rationale: &quot;Correcto. Permite aproximar funciones complejas con polinomios simples.&quot; }, { text: &quot;Convertirla en una serie geométrica.&quot;, isCorrect: false, rationale: &quot;No es una serie geométrica en general.&quot; } ] },
-    { question: &quot;Si el Criterio de la Razón da un límite L=1, ¿qué se concluye?&quot;, options: [ { text: &quot;La serie converge.&quot;, isCorrect: false, rationale: &quot;Eso es para L &lt; 1.&quot; }, { text: &quot;La serie diverge.&quot;, isCorrect: false, rationale: &quot;Eso es para L &gt; 1.&quot; }, { text: &quot;El criterio no es concluyente.&quot;, isCorrect: true, rationale: &quot;Correcto. Se debe usar otro criterio.&quot; }, { text: &quot;La serie converge condicionalmente.&quot;, isCorrect: false, rationale: &quot;El criterio no puede determinar esto.&quot; } ] },
-    // Preguntas Prácticas
-    { question: &quot;Calcula: lim(n&amp;rarr;&amp;infin;)(&amp;radic;(n&amp;sup2;+5n) - n)&quot;, options: [ { text: &quot;0&quot;, isCorrect: false, rationale: &quot;Incorrecto, la forma indeterminada requiere más análisis.&quot; }, { text: &quot;5/2&quot;, isCorrect: true, rationale: &quot;Correcto. Después de multiplicar por el conjugado, el límite es 5/2.&quot; }, { text: &quot;&amp;infin;&quot;, isCorrect: false, rationale: &quot;La diferencia de dos infinitos no es necesariamente infinito.&quot; }, { text: &quot;5&quot;, isCorrect: false, rationale: &quot;Error de cálculo al simplificar.&quot; } ] },
-    { question: &quot;¿Cuál es la suma de la serie &amp;Sigma;(n=1 a &amp;infin;)(2/3)^n?&quot;, options: [ { text: &quot;3&quot;, isCorrect: false, rationale: &quot;Error en la fórmula de la suma.&quot; }, { text: &quot;2&quot;, isCorrect: true, rationale: &quot;Correcto. a=2/3, r=2/3. Suma = (2/3)/(1-2/3) = 2.&quot; }, { text: &quot;Diverge&quot;, isCorrect: false, rationale: &quot;Converge porque |r| &lt; 1.&quot; }, { text: &quot;1&quot;, isCorrect: false, rationale: &quot;Resultado incorrecto.&quot; } ] },
-    { question: &quot;Primeros tres términos de la serie de Maclaurin para f(x) = e^(2x):&quot;, options: [ { text: &quot;1 + x + x&amp;sup2;/2&quot;, isCorrect: false, rationale: &quot;Esa es la serie para e^x.&quot; }, { text: &quot;1 + 2x + 2x&amp;sup2;&quot;, isCorrect: true, rationale: &quot;Correcto. f(0)=1, f&#39;(0)=2, f&#39;&#39;(0)=4. La serie es 1 + 2x + (4/2!)x&amp;sup2;.&quot; }, { text: &quot;1 + 2x + 4x&amp;sup2;&quot;, isCorrect: false, rationale: &quot;Olvidaste dividir el tercer término por 2!.&quot; }, { text: &quot;2x + 2x&amp;sup2; + 8x&amp;sup3;/3&quot;, isCorrect: false, rationale: &quot;La serie no está centrada en n=0.&quot; } ] },
-    { question: &quot;¿A qué es igual e^(i&amp;pi;)?&quot;, options: [ { text: &quot;1&quot;, isCorrect: false, rationale: &quot;Eso es e^(i2&amp;pi;).&quot; }, { text: &quot;-1&quot;, isCorrect: true, rationale: &quot;Correcto. e^(i&amp;pi;) = cos(&amp;pi;) + i*sin(&amp;pi;) = -1.&quot; }, { text: &quot;i&quot;, isCorrect: false, rationale: &quot;Eso es e^(i&amp;pi;/2).&quot; }, { text: &quot;-i&quot;, isCorrect: false, rationale: &quot;Eso es e^(i3&amp;pi;/2).&quot; } ] },
-    { question: &quot;Calcula el producto escalar: u = (2, -3, 1) y v = (1, 5, -2).&quot;, options: [ { text: &quot;-15&quot;, isCorrect: true, rationale: &quot;Correcto. (2*1)+(-3*5)+(1*-2) = -15.&quot; }, { text: &quot;15&quot;, isCorrect: false, rationale: &quot;Error de signo.&quot; }, { text: &quot;(-11, -5, 13)&quot;, isCorrect: false, rationale: &quot;Eso es un producto vectorial.&quot; }, { text: &quot;0&quot;, isCorrect: false, rationale: &quot;No son ortogonales.&quot; } ] },
-    { question: &quot;Calcula el producto vectorial: p = (1, 0, -2) y q = (2, -1, 3).&quot;, options: [ { text: &quot;7&quot;, isCorrect: false, rationale: &quot;El resultado es un vector.&quot; }, { text: &quot;(-2, -7, -1)&quot;, isCorrect: true, rationale: &quot;Correcto.&quot; }, { text: &quot;(2, 7, 1)&quot;, isCorrect: false, rationale: &quot;Es q x p, no p x q.&quot; }, { text: &quot;(2, -7, 1)&quot;, isCorrect: false, rationale: &quot;Error de signo.&quot; } ] },
-    { question: &quot;Área del triángulo con vértices A(1,1,1), B(2,3,1), C(1,2,3):&quot;, options: [ { text: &quot;&amp;radic;21&quot;, isCorrect: false, rationale: &quot;Esa es el área del paralelogramo.&quot; }, { text: &quot;&amp;radic;21 / 2&quot;, isCorrect: true, rationale: &quot;Correcto. Es la mitad de la magnitud del producto vectorial.&quot; }, { text: &quot;21&quot;, isCorrect: false, rationale: &quot;Error de cálculo.&quot; }, { text: &quot;21/2&quot;, isCorrect: false, rationale: &quot;Error de cálculo.&quot; } ] },
-    { question: &quot;Proyección de w=(1, 2, 2) sobre a=(2, 0, 1):&quot;, options: [ { text: &quot;4&quot;, isCorrect: false, rationale: &quot;La proyección es un vector.&quot; }, { text: &quot;(8/5, 0, 4/5)&quot;, isCorrect: true, rationale: &quot;Correcto.&quot; }, { text: &quot;(4/9, 8/9, 8/9)&quot;, isCorrect: false, rationale: &quot;Proyectaste a sobre w.&quot; }, { text: &quot;(2/5, 0, 1/5)&quot;, isCorrect: false, rationale: &quot;Error en la fórmula.&quot; } ] },
-    { question: &quot;Convierte (3, -3, 5) a coordenadas cilíndricas:&quot;, options: [ { text: &quot;(3&amp;radic;2, &amp;pi;/4, 5)&quot;, isCorrect: false, rationale: &quot;Cuadrante incorrecto para theta.&quot; }, { text: &quot;(3&amp;radic;2, 7&amp;pi;/4, 5)&quot;, isCorrect: true, rationale: &quot;Correcto. r=3&amp;radic;2, y el ángulo en el cuarto cuadrante es 7&amp;pi;/4.&quot; }, { text: &quot;(18, 7&amp;pi;/4, 5)&quot;, isCorrect: false, rationale: &quot;Error al calcular r.&quot; }, { text: &quot;(3, 3&amp;pi;/4, 5)&quot;, isCorrect: false, rationale: &quot;Error de cálculo.&quot; } ] },
-    { question: &quot;Describe la superficie &amp;phi; = &amp;pi;/4 en coordenadas esféricas.&quot;, options: [ { text: &quot;Un plano&quot;, isCorrect: false, rationale: &quot;Un plano horizontal sería &amp;phi; = &amp;pi;/2.&quot; }, { text: &quot;Un cono&quot;, isCorrect: true, rationale: &quot;Correcto. El ángulo constante desde el eje z forma un cono.&quot; }, { text: &quot;Una esfera&quot;, isCorrect: false, rationale: &quot;Una esfera es &amp;rho; = constante.&quot; }, { text: &quot;Un cilindro&quot;, isCorrect: false, rationale: &quot;Un cilindro es r = constante.&quot; } ] }
+  // Teoría (10)
+  {
+    question: "¿Cuál es la condición necesaria (pero no suficiente) para que converja una serie ∑ a_n?",
+    options: [
+      { text: "Que a_n sea decreciente.", isCorrect: false, rationale: "La monotonía no basta; es un criterio en algunas pruebas." },
+      { text: "Que lim(n→∞) a_n = 0.", isCorrect: true, rationale: "Si los términos no van a 0, la serie diverge. Es necesaria, no suficiente." },
+      { text: "Que la serie sea alternada.", isCorrect: false, rationale: "El signo alternado no garantiza convergencia." },
+      { text: "Que converja la serie de términos absolutos.", isCorrect: false, rationale: "Eso es convergencia absoluta, más fuerte." }
+    ]
+  },
+  {
+    question: "¿Qué representa geométricamente |u · v| para vectores u y v?",
+    options: [
+      { text: "El área del paralelogramo generado por u y v.", isCorrect: false, rationale: "Eso corresponde a |u × v|." },
+      { text: "La longitud del vector suma u+v.", isCorrect: false, rationale: "Eso es otra magnitud distinta." },
+      { text: "El producto de las magnitudes y el coseno del ángulo entre ellos.", isCorrect: true, rationale: "|u||v|cosθ y su valor absoluto da magnitud escalar." },
+      { text: "El volumen del paralelepípedo.", isCorrect: false, rationale: "El volumen se asocia a |u · (v × w)|." }
+    ]
+  },
+  {
+    question: "Diferencia entre serie de Taylor y de Maclaurin.",
+    options: [
+      { text: "Taylor es solo para polinomios.", isCorrect: false, rationale: "Aplica a funciones suficientemente derivables." },
+      { text: "Maclaurin es un caso particular de Taylor centrado en 0.", isCorrect: true, rationale: "Maclaurin = Taylor con a = 0." },
+      { text: "Maclaurin usa derivadas negativas.", isCorrect: false, rationale: "No tiene sentido derivadas negativas." },
+      { text: "Taylor no aproxima funciones, solo las evalúa.", isCorrect: false, rationale: "Taylor construye polinomios aproximantes." }
+    ]
+  },
+  {
+    question: "Si u · (v × w) = 0, ¿qué se concluye?",
+    options: [
+      { text: "Que u, v y w son mutuamente ortogonales.", isCorrect: false, rationale: "Eso implicaría producto distinto." },
+      { text: "Que el volumen del paralelepípedo es cero.", isCorrect: true, rationale: "u · (v × w) es el volumen orientado." },
+      { text: "Que u = 0.", isCorrect: false, rationale: "Puede ser coplanar sin ser nulo." },
+      { text: "Que v × w = 0 siempre.", isCorrect: false, rationale: "Solo si v y w son paralelos." }
+    ]
+  },
+  {
+    question: "¿Toda serie que converge absolutamente también converge condicionalmente?",
+    options: [
+      { text: "Verdadero.", isCorrect: false, rationale: "Convergencia absoluta implica convergencia total, no 'condicional'." },
+      { text: "Falso.", isCorrect: true, rationale: "Si converge absolutamente, ya converge; 'condicional' es cuando no converge absolutamente." }
+    ]
+  },
+  {
+    question: "¿Cuándo es más útil usar coordenadas esféricas?",
+    options: [
+      { text: "Cuando hay simetría respecto a un punto.", isCorrect: true, rationale: "Esferas, conos, regiones radiales." },
+      { text: "Cuando la región es un prisma rectangular.", isCorrect: false, rationale: "Más natural cartesiano." },
+      { text: "Cuando hay simetría respecto a un eje.", isCorrect: false, rationale: "Eso sugiere cilíndricas." },
+      { text: "En integrales de línea.", isCorrect: false, rationale: "Depende de la curva." }
+    ]
+  },
+  {
+    question: "Teorema de la Serie Alternada establece que:",
+    options: [
+      { text: "Si a_n decrece a 0, la serie alternada converge.", isCorrect: true, rationale: "Condiciones: términos decrecientes y límite 0." },
+      { text: "Toda serie alternada converge.", isCorrect: false, rationale: "Debe cumplir condiciones." },
+      { text: "Solo converge si es absolutamente convergente.", isCorrect: false, rationale: "Convergencia condicional es posible." },
+      { text: "Converge solo si los términos son constantes.", isCorrect: false, rationale: "No tendría sentido." }
+    ]
+  },
+  {
+    question: "Producto escalar vs vectorial: característica distintiva.",
+    options: [
+      { text: "Escalar produce un vector, vectorial un escalar.", isCorrect: false, rationale: "Es al revés." },
+      { text: "Escalar da un número; vectorial da un vector perpendicular.", isCorrect: true, rationale: "Así se distinguen en R³." },
+      { text: "Ambos siempre producen escalares.", isCorrect: false, rationale: "El cruz da vector." },
+      { text: "Ninguno depende del ángulo.", isCorrect: false, rationale: "Ambos dependen." }
+    ]
+  },
+  {
+    question: "Propósito principal de usar una serie de Taylor.",
+    options: [
+      { text: "Encontrar raíces exactas.", isCorrect: false, rationale: "No asegura raíces exactas." },
+      { text: "Aproximar una función mediante un polinomio local.", isCorrect: true, rationale: "Esa es su utilidad central." },
+      { text: "Volver periódica la función.", isCorrect: false, rationale: "No la hace periódica." },
+      { text: "Reducir dimensión.", isCorrect: false, rationale: "No se relaciona." }
+    ]
+  },
+  {
+    question: "Si el criterio de la razón da L = 1, ¿qué se concluye?",
+    options: [
+      { text: "La serie converge.", isCorrect: false, rationale: "Inconclusivo." },
+      { text: "La serie diverge.", isCorrect: false, rationale: "Inconclusivo." },
+      { text: "No decide; hay que usar otro criterio.", isCorrect: true, rationale: "Se requiere otro análisis." },
+      { text: "Que converge absolutamente.", isCorrect: false, rationale: "Eso sería L < 1." }
+    ]
+  },
+  // Práctica (10)
+  {
+    question: "Calcula: lim (n→∞)(√(n² + 5n) − n)",
+    options: [
+      { text: "0", isCorrect: false, rationale: "Racionaliza para ver el término dominante." },
+      { text: "5/2", isCorrect: true, rationale: "Tras racionalizar: ( (n²+5n) - n² ) / (√(n²+5n)+n ) ≈ (5n)/(2n)=5/2." },
+      { text: "∞", isCorrect: false, rationale: "El crecimiento se cancela parcialmente." },
+      { text: "1/5", isCorrect: false, rationale: "Confusión al dividir términos." }
+    ]
+  },
+  {
+    question: "Suma de la serie Σ (n=1→∞) (2/3)^n",
+    options: [
+      { text: "3", isCorrect: false, rationale: "Verifica la fórmula de serie geométrica." },
+      { text: "2", isCorrect: true, rationale: "S = a1 / (1 - r) = (2/3)/(1 - 2/3) = 2." },
+      { text: "5/3", isCorrect: false, rationale: "Cálculo incompleto." },
+      { text: "1", isCorrect: false, rationale: "Valor demasiado bajo." }
+    ]
+  },
+  {
+    question: "Primeros tres términos (hasta x²) de Maclaurin para e^{2x}:",
+    options: [
+      { text: "1 + x + x²/2", isCorrect: false, rationale: "Eso corresponde a e^x." },
+      { text: "1 + 2x + 2x²", isCorrect: true, rationale: "Derivadas: f(0)=1, f'(0)=2, f''(0)=4 => 4/2 = 2." },
+      { text: "1 + 2x + 4x²/2", isCorrect: true, rationale: "Equivalente a 1+2x+2x²." },
+      { text: "1 + 4x + 8x²", isCorrect: false, rationale: "Multiplicaste de más." }
+    ]
+  },
+  {
+    question: "Valor de e^{iπ}:",
+    options: [
+      { text: "1", isCorrect: false, rationale: "Eso sería e^{i2π}." },
+      { text: "-1", isCorrect: true, rationale: "Euler: e^{iθ} = cos θ + i sin θ => cos π = -1." },
+      { text: "i", isCorrect: false, rationale: "Eso sería e^{iπ/2}." },
+      { text: "-i", isCorrect: false, rationale: "Eso sería e^{i3π/2}." }
+    ]
+  },
+  {
+    question: "Producto escalar: u=(2,-3,1), v=(1,5,-2)",
+    options: [
+      { text: "-15", isCorrect: true, rationale: "(2)(1)+(-3)(5)+(1)(-2)=2-15-2=-15." },
+      { text: "5", isCorrect: false, rationale: "Revisa los signos." },
+      { text: "-9", isCorrect: false, rationale: "Cálculo incompleto." },
+      { text: "0", isCorrect: false, rationale: "No son ortogonales." }
+    ]
+  },
+  {
+    question: "Producto vectorial p=(1,0,-2), q=(2,-1,3)",
+    options: [
+      { text: "⟨-2, -7, -1⟩", isCorrect: true, rationale: "Determinante: i(0*3 - (-2)(-1)) - j(1*3 - (-2)*2)+ k(1*-1 - 0*2)= i(-2) - j(3+4)+ k(-1)=⟨-2,-7,-1⟩." },
+      { text: "⟨2,7,1⟩", isCorrect: false, rationale: "Olvidaste signos." },
+      { text: "⟨-2,7,1⟩", isCorrect: false, rationale: "Problema con componente j." },
+      { text: "7", isCorrect: false, rationale: "Resultado debe ser vector." }
+    ]
+  },
+  {
+    question: "Área del triángulo con A(1,1,1), B(2,3,1), C(1,2,3)",
+    options: [
+      { text: "√21", isCorrect: false, rationale: "Eso sería área del paralelogramo si fuera correcto." },
+      { text: "(1/2)√21", isCorrect: true, rationale: "Área = 1/2 ||(B-A) × (C-A)||." },
+      { text: "2√21", isCorrect: false, rationale: "Escala errónea." },
+      { text: "21", isCorrect: false, rationale: "Falta raíz y factor." }
+    ]
+  },
+  {
+    question: "Proyección de w=(1,2,2) sobre a=(2,0,1)",
+    options: [
+      { text: "4", isCorrect: false, rationale: "Eso sería el numerador del escalar." },
+      { text: "(4/5) a", isCorrect: true, rationale: "proj_a w = (w·a / ||a||²) a = (4 / 5) a." },
+      { text: "(5/4) a", isCorrect: false, rationale: "Invertiste la fracción." },
+      { text: "Vector unitario de w", isCorrect: false, rationale: "No es lo pedido." }
+    ]
+  },
+  {
+    question: "Convierte (3,-3,5) a cilíndricas (r, θ, z):",
+    options: [
+      { text: "(3√2, π/4, 5)", isCorrect: false, rationale: "x>0,y<0 => cuadrante IV." },
+      { text: "(3√2, -π/4, 5)", isCorrect: true, rationale: "r=√(3²+(-3)²)=3√2, θ=-π/4, z=5." },
+      { text: "(6, -π/4, 5)", isCorrect: false, rationale: "r mal calculado." },
+      { text: "(√6, -π/4, 5)", isCorrect: false, rationale: "Confusión en r." }
+    ]
+  },
+  {
+    question: "Superficie φ = π/4 en esféricas (convención: φ = ángulo desde el eje z)",
+    options: [
+      { text: "Un plano horizontal", isCorrect: false, rationale: "Plano horizontal sería z = c." },
+      { text: "Un cono con vértice en el origen", isCorrect: true, rationale: "φ constante define un cono." },
+      { text: "Una esfera de radio π/4", isCorrect: false, rationale: "Eso sería ρ = constante." },
+      { text: "Un cilindro", isCorrect: false, rationale: "Cilindro se asocia a r = constante." }
+    ]
+  }
 ];
 
 let currentQuestionIndex = 0;
 let score = 0;
 
-const questionContainer = document.getElementById(&#39;question-container&#39;);
-const questionText = document.getElementById(&#39;question-text&#39;);
-const answerOptionsContainer = document.getElementById(&#39;answer-options&#39;);
-const rationaleText = document.getElementById(&#39;rationale-text&#39;);
-const nextBtn = document.getElementById(&#39;next-btn&#39;);
-const progressText = document.getElementById(&#39;progress-text&#39;);
-const resultsContainer = document.getElementById(&#39;results-container&#39;);
-const scoreText = document.getElementById(&#39;score-text&#39;);
-const restartBtn = document.getElementById(&#39;restart-btn&#39;);
+const questionText = document.getElementById('question-text');
+const answerOptionsContainer = document.getElementById('answer-options');
+const rationaleText = document.getElementById('rationale-text');
+const nextBtn = document.getElementById('next-btn');
+const progressText = document.getElementById('progress-text');
+const resultsContainer = document.getElementById('results-container');
+const scoreText = document.getElementById('score-text');
+const restartBtn = document.getElementById('restart-btn');
+const questionContainer = document.getElementById('question-container');
 
 function startQuiz() {
-    currentQuestionIndex = 0;
-    score = 0;
-    resultsContainer.classList.add(&#39;hidden&#39;);
-    questionContainer.classList.remove(&#39;hidden&#39;);
-    answerOptionsContainer.classList.remove(&#39;hidden&#39;);
-    progressText.classList.remove(&#39;hidden&#39;);
-    nextBtn.classList.add(&#39;hidden&#39;);
-    showQuestion();
+  currentQuestionIndex = 0;
+  score = 0;
+  resultsContainer.classList.add('hidden');
+  questionContainer.classList.remove('hidden');
+  answerOptionsContainer.classList.remove('hidden');
+  progressText.classList.remove('hidden');
+  nextBtn.classList.add('hidden');
+  showQuestion();
 }
 
 function showQuestion() {
-    resetState();
-    const question = quizData[currentQuestionIndex];
-    questionText.innerHTML = `&lt;strong&gt;Pregunta ${currentQuestionIndex + 1}:&lt;/strong&gt; ${question.question}`;
-    progressText.textContent = `Pregunta ${currentQuestionIndex + 1} de ${quizData.length}`;
-    
-    question.options.forEach(option =&gt; {
-        const button = document.createElement(&#39;button&#39;);
-        button.innerHTML = option.text;
-        button.classList.add(&#39;answer-btn&#39;, &#39;w-full&#39;, &#39;text-left&#39;, &#39;p-4&#39;, &#39;border&#39;, &#39;border-gray-300&#39;, &#39;rounded-md&#39;, &#39;hover:bg-gray-100&#39;);
-        button.addEventListener(&#39;click&#39;, () =&gt; selectAnswer(button, option));
-        answerOptionsContainer.appendChild(button);
-    });
+  resetState();
+  const q = quizData[currentQuestionIndex];
+  questionText.innerHTML = `<strong>Pregunta ${currentQuestionIndex + 1}:</strong> ${q.question}`;
+  progressText.textContent = `Pregunta ${currentQuestionIndex + 1} de ${quizData.length}`;
+
+  q.options.forEach(option => {
+    const btn = document.createElement('button');
+    btn.textContent = option.text;
+    btn.className =
+      'answer-btn w-full text-left p-4 border border-gray-300 rounded-md hover:bg-gray-100 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition';
+    btn.addEventListener('click', () => selectAnswer(btn, option));
+    answerOptionsContainer.appendChild(btn);
+  });
 }
 
 function resetState() {
-    while (answerOptionsContainer.firstChild) {
-        answerOptionsContainer.removeChild(answerOptionsContainer.firstChild);
-    }
-    rationaleText.textContent = &#39;&#39;;
-    nextBtn.classList.add(&#39;hidden&#39;);
+  answerOptionsContainer.innerHTML = '';
+  rationaleText.textContent = '';
+  nextBtn.classList.add('hidden');
 }
 
 function selectAnswer(button, option) {
-    Array.from(answerOptionsContainer.children).forEach(btn =&gt; {
-        btn.disabled = true;
-    });
+  Array.from(answerOptionsContainer.children).forEach(btn => { btn.disabled = true; });
 
-    if (option.isCorrect) {
-        button.classList.add(&#39;correct&#39;);
-        score++;
-    } else {
-        button.classList.add(&#39;incorrect&#39;);
-        const correctOption = quizData[currentQuestionIndex].options.find(opt =&gt; opt.isCorrect);
-        const correctButton = Array.from(answerOptionsContainer.children).find(btn =&gt; btn.innerHTML === correctOption.text);
-        if (correctButton) {
-            correctButton.classList.add(&#39;correct&#39;);
-        }
-    }
-    
-    rationaleText.textContent = `Justificación: ${option.rationale}`;
-    nextBtn.classList.remove(&#39;hidden&#39;);
+  if (option.isCorrect) {
+    button.classList.add('correct');
+    score++;
+  } else {
+    button.classList.add('incorrect');
+    const correctOption = quizData[currentQuestionIndex].options.find(o => o.isCorrect);
+    const correctBtn = Array.from(answerOptionsContainer.children)
+      .find(b => b.textContent === correctOption.text);
+    if (correctBtn) correctBtn.classList.add('correct');
+  }
+  rationaleText.textContent = `Justificación: ${option.rationale}`;
+  nextBtn.classList.remove('hidden');
 }
 
 function showResults() {
-    questionContainer.classList.add(&#39;hidden&#39;);
-    answerOptionsContainer.classList.add(&#39;hidden&#39;);
-    progressText.classList.add(&#39;hidden&#39;);
-    nextBtn.classList.add(&#39;hidden&#39;);
-    resultsContainer.classList.remove(&#39;hidden&#39;);
-    scoreText.textContent = `Tu puntuación final es ${score} de ${quizData.length}.`;
+  questionContainer.classList.add('hidden');
+  answerOptionsContainer.classList.add('hidden');
+  progressText.classList.add('hidden');
+  nextBtn.classList.add('hidden');
+  resultsContainer.classList.remove('hidden');
+  scoreText.textContent = `Tu puntuación final es ${score} de ${quizData.length}.`;
 }
 
-nextBtn.addEventListener(&#39;click&#39;, () =&gt; {
-    currentQuestionIndex++;
-    if (currentQuestionIndex &lt; quizData.length) {
-        showQuestion();
-    } else {
-        showResults();
-    }
+nextBtn.addEventListener('click', () => {
+  currentQuestionIndex++;
+  if (currentQuestionIndex < quizData.length) {
+    showQuestion();
+  } else {
+    showResults();
+  }
 });
 
-restartBtn.addEventListener(&#39;click&#39;, startQuiz);
-
-document.addEventListener(&#39;DOMContentLoaded&#39;, startQuiz);
-
+restartBtn.addEventListener('click', startQuiz);
+document.addEventListener('DOMContentLoaded', startQuiz);
 </script>
 
 </body>
