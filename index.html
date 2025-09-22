@@ -123,16 +123,14 @@ const promptTextarea = document.getElementById('ai-prompt');
 const aiResponseDiv = document.getElementById('aiResponse');
 const loadingDiv = document.getElementById('ai-loading');
 
-// Esta clave se deja vacía a propósito. 
-// La plataforma (Netlify/GitHub Pages) la inyectará automáticamente al publicar.
-const API_KEY = &quot;&quot;; 
+const API_KEY = &quot;&quot;;
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
 
 function simpleMarkdownToHtml(text) {
     text = text.replace(/\*\*(.*?)\*\*/g, &#39;&lt;strong&gt;$1&lt;/strong&gt;&#39;);
     text = text.replace(/^### (.*$)/gim, &#39;&lt;h3&gt;$1&lt;/h3&gt;&#39;);
     text = text.replace(/^\* (.*$)/gim, &#39;&lt;li&gt;$1&lt;/li&gt;&#39;);
-    text = text.replace(/(\&lt;\/li\&gt;)?\n?&lt;li&gt;/g, &#39;&lt;li&gt;&#39;);
+    text = text.replace(/(&lt;\/li&gt;)?\n?&lt;li&gt;/g, &#39;&lt;li&gt;&#39;);
     text = text.replace(/(&lt;li&gt;.*&lt;\/li&gt;)/gs, &#39;&lt;ul&gt;$1&lt;/ul&gt;&#39;);
     text = text.split(&#39;\n&#39;).map(p =&gt; p.trim() ? `&lt;p&gt;${p}&lt;/p&gt;` : &#39;&#39;).join(&#39;&#39;);
     text = text.replace(/&lt;p&gt;&lt;\/p&gt;/g, &#39;&#39;);
@@ -309,4 +307,3 @@ document.addEventListener(&#39;DOMContentLoaded&#39;, startQuiz);
 
 </body>
 </html>
-
