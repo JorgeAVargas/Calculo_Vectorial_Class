@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Repaso de Cálculo Multivariable con Tutor IA</title>
+<title>Repaso de Cálculo Multivariable</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -26,34 +26,21 @@ body { font-family: 'Inter', sans-serif; }
   color: #991b1b !important;
 }
 .answer-btn:disabled { cursor: not-allowed; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.spinner {
-  border: 4px solid rgba(0,0,0,0.1);
-  border-left-color: #4f46e5;
-  border-radius: 50%;
-  width: 40px; height: 40px;
-  animation: spin 1s linear infinite;
-}
-#aiResponse p { margin-bottom: 1rem; }
-#aiResponse h3 { font-size: 1.25rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem; }
-#aiResponse ul { list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1rem; }
-#aiResponse li { margin-bottom: 0.25rem; }
-#aiResponse strong, #aiResponse b { font-weight: 600; }
 </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
 
 <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-4xl">
   <header class="text-center mb-8">
-    <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">Clase de Repaso de Cálculo Multivariable</h1>
-    <p class="mt-2 text-lg text-gray-600">¡Pon a prueba tus conocimientos y resuelve tus dudas con el Tutor de IA!</p>
+    <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">Repaso de Cálculo Multivariable</h1>
+    <p class="mt-2 text-lg text-gray-600">¡Pon a prueba tus conocimientos!</p>
   </header>
 
   <main>
     <!-- Examen Interactivo -->
     <div class="bg-white p-6 sm:p-8 rounded-lg shadow-md mb-8">
       <h2 class="text-2xl font-semibold mb-6">Examen Interactivo de Práctica</h2>
-      <p class="mb-6">Responde las siguientes 20 preguntas (10 de teoría y 10 de práctica) para evaluar tu comprensión. ¡Mucho éxito!</p>
+      <p class="mb-6">Responde las siguientes 20 preguntas (10 de teoría y 10 de práctica) para evaluar tu comprensión. Lee la justificación tras cada respuesta para reforzar conceptos.</p>
       <div id="quiz-app" class="quiz-container p-6">
         <div id="question-container" class="mb-4">
           <p id="question-text" class="text-lg font-semibold text-gray-900"></p>
@@ -79,194 +66,10 @@ body { font-family: 'Inter', sans-serif; }
         </div>
       </div>
     </div>
-
-    <!-- Tutor IA -->
-    <div id="ai-tutor" class="bg-white p-6 sm:p-8 rounded-lg shadow-md">
-      <h2 class="text-2xl font-semibold mb-2 flex items-center">
-        <span class="text-2xl mr-2">✨</span> Tutor de Cálculo con IA
-      </h2>
-      <p class="mb-6 text-gray-600">Pega una pregunta del examen o escribe un concepto para obtener explicación o un problema nuevo.</p>
-
-      <div class="mb-4">
-        <label for="ai-prompt" class="block text-sm font-medium text-gray-700 mb-2">Pregunta o Concepto:</label>
-        <textarea id="ai-prompt" rows="4"
-                  class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
-                  placeholder="Ej: ‘¿Cuál es la diferencia entre convergencia absoluta y condicional?’"></textarea>
-      </div>
-
-      <div class="flex flex-col sm:flex-row gap-4">
-        <button id="explain-btn"
-                class="flex-1 inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
-          Explicar el Concepto
-        </button>
-        <button id="generate-btn"
-                class="flex-1 inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50">
-          Generar Problema Similar
-        </button>
-        <button id="clear-ai-btn"
-                class="flex-1 inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-rose-500 hover:bg-rose-600">
-          Limpiar Respuesta
-        </button>
-      </div>
-
-      <div class="mt-4">
-        <label class="block text-sm font-medium text-gray-700 mb-1" for="apiKeyInput">API Key (temporal para pruebas)</label>
-        <input id="apiKeyInput" type="password" placeholder="Pega aquí tu API key (no la subas al repo)"
-               class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"/>
-        <button id="saveKeyBtn"
-                class="mt-2 px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 text-sm">
-          Guardar en esta sesión
-        </button>
-        <p id="apiKeyStatus" class="text-xs text-gray-500 mt-1"></p>
-      </div>
-
-      <div id="ai-response-container" class="mt-8 p-6 bg-gray-50 rounded-lg border border-gray-200 min-h-[120px]">
-        <div id="ai-loading" class="hidden flex flex-col items-center justify-center text-gray-500">
-          <div class="spinner"></div>
-          <p class="mt-3">El Tutor IA está pensando...</p>
-        </div>
-        <div id="aiResponse" class="text-gray-800">
-          <p class="text-gray-500">La respuesta de la IA aparecerá aquí.</p>
-        </div>
-      </div>
-      <p class="mt-4 text-xs text-gray-500">
-        Nota: Para producción, usa un backend proxy para proteger tu API key. Este campo es solo para pruebas locales.
-      </p>
-    </div>
   </main>
 </div>
 
 <script>
-/* ===================== Tutor IA ===================== */
-const explainBtn = document.getElementById('explain-btn');
-const generateBtn = document.getElementById('generate-btn');
-const clearAiBtn = document.getElementById('clear-ai-btn');
-const promptTextarea = document.getElementById('ai-prompt');
-const aiResponseDiv = document.getElementById('aiResponse');
-const loadingDiv = document.getElementById('ai-loading');
-const apiKeyInput = document.getElementById('apiKeyInput');
-const saveKeyBtn = document.getElementById('saveKeyBtn');
-const apiKeyStatus = document.getElementById('apiKeyStatus');
-
-const MODEL = "gemini-1.5-flash-latest";
-
-// Guardar / cargar API key en sessionStorage
-function loadApiKey() {
-  const k = sessionStorage.getItem('GEMINI_API_KEY');
-  if (k) {
-    apiKeyStatus.textContent = "API key cargada en memoria (no se guarda permanentemente).";
-  } else {
-    apiKeyStatus.textContent = "Introduce tu API key para habilitar el Tutor.";
-  }
-  return k || "";
-}
-let API_KEY = loadApiKey();
-
-saveKeyBtn.addEventListener('click', () => {
-  if (!apiKeyInput.value.trim()) {
-    apiKeyStatus.textContent = "API key vacía.";
-    apiKeyStatus.classList.add('text-red-500');
-    return;
-  }
-  sessionStorage.setItem('GEMINI_API_KEY', apiKeyInput.value.trim());
-  API_KEY = apiKeyInput.value.trim();
-  apiKeyInput.value = "";
-  apiKeyStatus.textContent = "API key guardada temporalmente. (No recargues para mantenerla)";
-  apiKeyStatus.classList.remove('text-red-500');
-  apiKeyStatus.classList.add('text-emerald-600');
-});
-
-function simpleMarkdownToHtml(text) {
-  if (!text) return "";
-  // Escapar básico para evitar inyección (modelo no debe devolver HTML, pero por seguridad)
-  text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  // Negritas
-  text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  // Títulos (solo nivel 3 sencillo)
-  text = text.replace(/^### (.*)$/gim, '<h3>$1</h3>');
-  // Listas (líneas que empiezan con - o * )
-  const lines = text.split(/\r?\n/);
-  let inList = false;
-  let html = "";
-  for (const line of lines) {
-    if (/^\s*([-*])\s+/.test(line)) {
-      if (!inList) {
-        inList = true;
-        html += "<ul>";
-      }
-      html += `<li>${line.replace(/^\s*[-*]\s+/, '')}</li>`;
-    } else {
-      if (inList) {
-        inList = false;
-        html += "</ul>";
-      }
-      if (line.trim()) {
-        html += `<p>${line}</p>`;
-      }
-    }
-  }
-  if (inList) html += "</ul>";
-  return html;
-}
-
-async function callGeminiAPI(prompt, maxRetries = 3) {
-  if (!API_KEY) {
-    aiResponseDiv.innerHTML = '<p class="text-red-500">Falta la API key. Insértala antes de usar el Tutor.</p>';
-    return;
-  }
-  loadingDiv.classList.remove('hidden');
-  aiResponseDiv.innerHTML = '';
-
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${API_KEY}`;
-  const payload = { contents: [{ parts: [{ text: prompt }]}] };
-
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type':'application/json' },
-        body: JSON.stringify(payload)
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      loadingDiv.classList.add('hidden');
-
-      const candidate = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!candidate) {
-        aiResponseDiv.innerHTML = '<p class="text-red-500">Respuesta vacía del modelo.</p>';
-        return;
-      }
-      aiResponseDiv.innerHTML = simpleMarkdownToHtml(candidate);
-      return;
-    } catch (err) {
-      if (attempt === maxRetries - 1) {
-        loadingDiv.classList.add('hidden');
-        aiResponseDiv.innerHTML = `<p class="text-red-500">Error al comunicar con la API (${err.message}). Intenta más tarde.</p>`;
-      } else {
-        await new Promise(r => setTimeout(r, (2 ** attempt) * 1000));
-      }
-    }
-  }
-}
-
-explainBtn.addEventListener('click', () => {
-  const userInput = promptTextarea.value.trim();
-  if (!userInput) return;
-  const prompt = `Eres un profesor experto de cálculo multivariable. Explica con pasos claros y ejemplos el siguiente concepto o pregunta: "${userInput}". Incluye: 1) Definición, 2) Contexto, 3) Ejemplo práctico, 4) Errores comunes.`;
-  callGeminiAPI(prompt);
-});
-
-generateBtn.addEventListener('click', () => {
-  const userInput = promptTextarea.value.trim();
-  if (!userInput) return;
-  const prompt = `Eres profesor de cálculo multivariable. Genera un nuevo problema similar al siguiente (no lo copies), con distinta notación y números. Luego da: 1) Enunciado claro, 2) Pistas graduadas, 3) Solución paso a paso, 4) Variación adicional. Pregunta original: "${userInput}".`;
-  callGeminiAPI(prompt);
-});
-
-clearAiBtn.addEventListener('click', () => {
-  aiResponseDiv.innerHTML = '<p class="text-gray-500">La respuesta de la IA aparecerá aquí.</p>';
-});
-
 /* ===================== Examen Interactivo ===================== */
 const quizData = [
   // Teoría (10)
@@ -533,7 +336,7 @@ nextBtn.addEventListener('click', () => {
 });
 
 restartBtn.addEventListener('click', startQuiz);
-document.addEventListener('DOMContentLoaded', startQuiz);
+window.addEventListener('DOMContentLoaded', startQuiz);
 </script>
 
 </body>
