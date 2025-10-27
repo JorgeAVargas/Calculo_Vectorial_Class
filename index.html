@@ -1,342 +1,571 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Repaso de Cálculo Multivariable</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-body { font-family: 'Inter', sans-serif; }
-.quiz-container {
-  border: 1px solid #e2e8f0;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  overflow: hidden;
-}
-.answer-btn { transition: background-color 0.2s, border-color 0.2s; }
-.answer-btn.correct {
-  background-color: #dcfce7 !important;
-  border-color: #22c55e !important;
-  color: #166534 !important;
-}
-.answer-btn.incorrect {
-  background-color: #fee2e2 !important;
-  border-color: #ef4444 !important;
-  color: #991b1b !important;
-}
-.answer-btn:disabled { cursor: not-allowed; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Cálculo Varias Variables - Segundo Parcial</title>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --success-color: #22c55e;
+            --error-color: #ef4444;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: #1e293b;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--bg-color);
+            padding-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #e2e8f0;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .question-section {
+            margin-bottom: 25px;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #0f172a;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 15px 20px;
+            text-align: left;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+            width: 100%;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: var(--primary-color);
+        }
+
+        .option-btn.selected {
+            border-color: var(--primary-color);
+            background-color: #eff6ff;
+        }
+
+        .option-btn.correct {
+            background-color: #dcfce7 !important;
+            border-color: var(--success-color) !important;
+            color: #166534;
+        }
+
+        .option-btn.incorrect {
+            background-color: #fee2e2 !important;
+            border-color: var(--error-color) !important;
+            color: #991b1b;
+        }
+
+        .feedback-section {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .feedback-correct {
+            background-color: #dcfce7;
+            border-left: 5px solid var(--success-color);
+        }
+
+        .feedback-incorrect {
+            background-color: #fee2e2;
+            border-left: 5px solid var(--error-color);
+        }
+
+        .rationale {
+            margin-top: 10px;
+            font-size: 0.95rem;
+        }
+
+        .controls {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hint-btn {
+            color: var(--primary-color);
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 0.9rem;
+        }
+
+        .hint-text {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            font-size: 0.9rem;
+            color: #92400e;
+        }
+
+        .next-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            display: none;
+        }
+
+        .next-btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .results-section {
+            text-align: center;
+            display: none;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body>
 
-<div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-4xl">
-  <header class="text-center mb-8">
-    <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">Repaso de Cálculo Multivariable</h1>
-  </header>
-
-  <main>
-    <!-- Examen Interactivo -->
-    <div class="bg-white p-6 sm:p-8 rounded-lg shadow-md mb-8">
-      <h2 class="text-2xl font-semibold mb-6">Examen Interactivo de Práctica</h2>
-      <p class="mb-6">Responde las siguientes 20 preguntas (10 de teoría y 10 de práctica) para evaluar tu comprensión. Lee la justificación tras cada respuesta para reforzar conceptos.</p>
-      <div id="quiz-app" class="quiz-container p-6">
-        <div id="question-container" class="mb-4">
-          <p id="question-text" class="text-lg font-semibold text-gray-900"></p>
-        </div>
-        <div id="answer-options" class="grid grid-cols-1 gap-4"></div>
-        <div id="feedback-container" class="mt-4 text-sm text-gray-700">
-          <p id="rationale-text"></p>
-        </div>
-        <div class="mt-6 flex justify-between items-center">
-          <p id="progress-text" class="text-sm text-gray-500"></p>
-          <button id="next-btn"
-                  class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hidden">
-            Siguiente
-          </button>
-        </div>
-        <div id="results-container" class="hidden text-center">
-          <h3 class="text-2xl font-bold">¡Examen completado!</h3>
-            <p id="score-text" class="text-xl mt-4"></p>
-            <button id="restart-btn"
-                    class="mt-6 px-6 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700">
-              Intentar de Nuevo
-            </button>
-        </div>
-      </div>
+<div class="quiz-container">
+    <div class="header">
+        <h1>Repaso: Cálculo Multivariable</h1>
+        <p>Segundo Parcial - Capítulos 13-14</p>
     </div>
-  </main>
+
+    <div id="quiz-active">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress"></div>
+        </div>
+
+        <div class="question-section">
+            <div id="question-counter" style="color: #64748b; margin-bottom: 10px; font-size: 0.9rem;">Pregunta 1 de 20</div>
+            <div class="question-text" id="question-text">Cargando pregunta...</div>
+            <div class="options-grid" id="options-container">
+                </div>
+        </div>
+
+        <div class="controls">
+            <div>
+                <button class="hint-btn" onclick="toggleHint()">💡 Mostrar Pista</button>
+                <div id="hint-text" class="hint-text"></div>
+            </div>
+            <button class="next-btn" id="next-btn" onclick="nextQuestion()">Siguiente Pregunta →</button>
+        </div>
+
+        <div id="feedback" class="feedback-section">
+            <h3 id="feedback-title" style="margin-top:0;"></h3>
+            <div id="feedback-rationale" class="rationale"></div>
+        </div>
+    </div>
+
+    <div id="results" class="results-section">
+        <h2>¡Quiz Completado!</h2>
+        <div class="score-display" id="final-score">0 / 20</div>
+        <p id="score-message"></p>
+        <button class="next-btn" style="display: inline-block; margin-top: 20px;" onclick="location.reload()">Intentar de nuevo</button>
+    </div>
+
 </div>
 
 <script>
-/* ===================== Examen Interactivo ===================== */
+// Datos del Quiz (incrustados directamente para evitar problemas de CORS en local/GitHub)
 const quizData = [
-  // Teoría (10)
-  {
-    question: "¿Cuál es la condición necesaria (pero no suficiente) para que converja una serie ∑ a_n?",
-    options: [
-      { text: "Que a_n sea decreciente.", isCorrect: false, rationale: "La monotonía no basta; es un criterio en algunas pruebas." },
-      { text: "Que lim(n→∞) a_n = 0.", isCorrect: true, rationale: "Si los términos no van a 0, la serie diverge. Es necesaria, no suficiente." },
-      { text: "Que la serie sea alternada.", isCorrect: false, rationale: "El signo alternado no garantiza convergencia." },
-      { text: "Que converja la serie de términos absolutos.", isCorrect: false, rationale: "Eso es convergencia absoluta, más fuerte." }
-    ]
-  },
-  {
-    question: "¿Qué representa geométricamente |u · v| para vectores u y v?",
-    options: [
-      { text: "El área del paralelogramo generado por u y v.", isCorrect: false, rationale: "Eso corresponde a |u × v|." },
-      { text: "La longitud del vector suma u+v.", isCorrect: false, rationale: "Eso es otra magnitud distinta." },
-      { text: "El producto de las magnitudes y el coseno del ángulo entre ellos.", isCorrect: true, rationale: "|u||v|cosθ y su valor absoluto da magnitud escalar." },
-      { text: "El volumen del paralelepípedo.", isCorrect: false, rationale: "El volumen se asocia a |u · (v × w)|." }
-    ]
-  },
-  {
-    question: "Diferencia entre serie de Taylor y de Maclaurin.",
-    options: [
-      { text: "Taylor es solo para polinomios.", isCorrect: false, rationale: "Aplica a funciones suficientemente derivables." },
-      { text: "Maclaurin es un caso particular de Taylor centrado en 0.", isCorrect: true, rationale: "Maclaurin = Taylor con a = 0." },
-      { text: "Maclaurin usa derivadas negativas.", isCorrect: false, rationale: "No tiene sentido derivadas negativas." },
-      { text: "Taylor no aproxima funciones, solo las evalúa.", isCorrect: false, rationale: "Taylor construye polinomios aproximantes." }
-    ]
-  },
-  {
-    question: "Si u · (v × w) = 0, ¿qué se concluye?",
-    options: [
-      { text: "Que u, v y w son mutuamente ortogonales.", isCorrect: false, rationale: "Eso implicaría producto distinto." },
-      { text: "Que el volumen del paralelepípedo es cero.", isCorrect: true, rationale: "u · (v × w) es el volumen orientado." },
-      { text: "Que u = 0.", isCorrect: false, rationale: "Puede ser coplanar sin ser nulo." },
-      { text: "Que v × w = 0 siempre.", isCorrect: false, rationale: "Solo si v y w son paralelos." }
-    ]
-  },
-  {
-    question: "¿Toda serie que converge absolutamente también converge condicionalmente?",
-    options: [
-      { text: "Verdadero.", isCorrect: false, rationale: "Convergencia absoluta implica convergencia total, no 'condicional'." },
-      { text: "Falso.", isCorrect: true, rationale: "Si converge absolutamente, ya converge; 'condicional' es cuando no converge absolutamente." }
-    ]
-  },
-  {
-    question: "¿Cuándo es más útil usar coordenadas esféricas?",
-    options: [
-      { text: "Cuando hay simetría respecto a un punto.", isCorrect: true, rationale: "Esferas, conos, regiones radiales." },
-      { text: "Cuando la región es un prisma rectangular.", isCorrect: false, rationale: "Más natural cartesiano." },
-      { text: "Cuando hay simetría respecto a un eje.", isCorrect: false, rationale: "Eso sugiere cilíndricas." },
-      { text: "En integrales de línea.", isCorrect: false, rationale: "Depende de la curva." }
-    ]
-  },
-  {
-    question: "Teorema de la Serie Alternada establece que:",
-    options: [
-      { text: "Si a_n decrece a 0, la serie alternada converge.", isCorrect: true, rationale: "Condiciones: términos decrecientes y límite 0." },
-      { text: "Toda serie alternada converge.", isCorrect: false, rationale: "Debe cumplir condiciones." },
-      { text: "Solo converge si es absolutamente convergente.", isCorrect: false, rationale: "Convergencia condicional es posible." },
-      { text: "Converge solo si los términos son constantes.", isCorrect: false, rationale: "No tendría sentido." }
-    ]
-  },
-  {
-    question: "Producto escalar vs vectorial: característica distintiva.",
-    options: [
-      { text: "Escalar produce un vector, vectorial un escalar.", isCorrect: false, rationale: "Es al revés." },
-      { text: "Escalar da un número; vectorial da un vector perpendicular.", isCorrect: true, rationale: "Así se distinguen en R³." },
-      { text: "Ambos siempre producen escalares.", isCorrect: false, rationale: "El cruz da vector." },
-      { text: "Ninguno depende del ángulo.", isCorrect: false, rationale: "Ambos dependen." }
-    ]
-  },
-  {
-    question: "Propósito principal de usar una serie de Taylor.",
-    options: [
-      { text: "Encontrar raíces exactas.", isCorrect: false, rationale: "No asegura raíces exactas." },
-      { text: "Aproximar una función mediante un polinomio local.", isCorrect: true, rationale: "Esa es su utilidad central." },
-      { text: "Volver periódica la función.", isCorrect: false, rationale: "No la hace periódica." },
-      { text: "Reducir dimensión.", isCorrect: false, rationale: "No se relaciona." }
-    ]
-  },
-  {
-    question: "Si el criterio de la razón da L = 1, ¿qué se concluye?",
-    options: [
-      { text: "La serie converge.", isCorrect: false, rationale: "Inconclusivo." },
-      { text: "La serie diverge.", isCorrect: false, rationale: "Inconclusivo." },
-      { text: "No decide; hay que usar otro criterio.", isCorrect: true, rationale: "Se requiere otro análisis." },
-      { text: "Que converge absolutamente.", isCorrect: false, rationale: "Eso sería L < 1." }
-    ]
-  },
-  // Práctica (10)
-  {
-    question: "Calcula: lim (n→∞)(√(n² + 5n) − n)",
-    options: [
-      { text: "0", isCorrect: false, rationale: "Racionaliza para ver el término dominante." },
-      { text: "5/2", isCorrect: true, rationale: "Tras racionalizar: ( (n²+5n) - n² ) / (√(n²+5n)+n ) ≈ (5n)/(2n)=5/2." },
-      { text: "∞", isCorrect: false, rationale: "El crecimiento se cancela parcialmente." },
-      { text: "1/5", isCorrect: false, rationale: "Confusión al dividir términos." }
-    ]
-  },
-  {
-    question: "Suma de la serie Σ (n=1→∞) (2/3)^n",
-    options: [
-      { text: "3", isCorrect: false, rationale: "Verifica la fórmula de serie geométrica." },
-      { text: "2", isCorrect: true, rationale: "S = a1 / (1 - r) = (2/3)/(1 - 2/3) = 2." },
-      { text: "5/3", isCorrect: false, rationale: "Cálculo incompleto." },
-      { text: "1", isCorrect: false, rationale: "Valor demasiado bajo." }
-    ]
-  },
-  {
-    question: "Primeros tres términos (hasta x²) de Maclaurin para e^{2x}:",
-    options: [
-      { text: "1 + x + x²/2", isCorrect: false, rationale: "Eso corresponde a e^x." },
-      { text: "1 + 2x + 2x²", isCorrect: true, rationale: "Derivadas: f(0)=1, f'(0)=2, f''(0)=4 => 4/2 = 2." },
-      { text: "1 + 2x + 4x²/2", isCorrect: true, rationale: "Equivalente a 1+2x+2x²." },
-      { text: "1 + 4x + 8x²", isCorrect: false, rationale: "Multiplicaste de más." }
-    ]
-  },
-  {
-    question: "Valor de e^{iπ}:",
-    options: [
-      { text: "1", isCorrect: false, rationale: "Eso sería e^{i2π}." },
-      { text: "-1", isCorrect: true, rationale: "Euler: e^{iθ} = cos θ + i sin θ => cos π = -1." },
-      { text: "i", isCorrect: false, rationale: "Eso sería e^{iπ/2}." },
-      { text: "-i", isCorrect: false, rationale: "Eso sería e^{i3π/2}." }
-    ]
-  },
-  {
-    question: "Producto escalar: u=(2,-3,1), v=(1,5,-2)",
-    options: [
-      { text: "-15", isCorrect: true, rationale: "(2)(1)+(-3)(5)+(1)(-2)=2-15-2=-15." },
-      { text: "5", isCorrect: false, rationale: "Revisa los signos." },
-      { text: "-9", isCorrect: false, rationale: "Cálculo incompleto." },
-      { text: "0", isCorrect: false, rationale: "No son ortogonales." }
-    ]
-  },
-  {
-    question: "Producto vectorial p=(1,0,-2), q=(2,-1,3)",
-    options: [
-      { text: "⟨-2, -7, -1⟩", isCorrect: true, rationale: "Determinante: i(0*3 - (-2)(-1)) - j(1*3 - (-2)*2)+ k(1*-1 - 0*2)= i(-2) - j(3+4)+ k(-1)=⟨-2,-7,-1⟩." },
-      { text: "⟨2,7,1⟩", isCorrect: false, rationale: "Olvidaste signos." },
-      { text: "⟨-2,7,1⟩", isCorrect: false, rationale: "Problema con componente j." },
-      { text: "7", isCorrect: false, rationale: "Resultado debe ser vector." }
-    ]
-  },
-  {
-    question: "Área del triángulo con A(1,1,1), B(2,3,1), C(1,2,3)",
-    options: [
-      { text: "√21", isCorrect: false, rationale: "Eso sería área del paralelogramo si fuera correcto." },
-      { text: "(1/2)√21", isCorrect: true, rationale: "Área = 1/2 ||(B-A) × (C-A)||." },
-      { text: "2√21", isCorrect: false, rationale: "Escala errónea." },
-      { text: "21", isCorrect: false, rationale: "Falta raíz y factor." }
-    ]
-  },
-  {
-    question: "Proyección de w=(1,2,2) sobre a=(2,0,1)",
-    options: [
-      { text: "4", isCorrect: false, rationale: "Eso sería el numerador del escalar." },
-      { text: "(4/5) a", isCorrect: true, rationale: "proj_a w = (w·a / ||a||²) a = (4 / 5) a." },
-      { text: "(5/4) a", isCorrect: false, rationale: "Invertiste la fracción." },
-      { text: "Vector unitario de w", isCorrect: false, rationale: "No es lo pedido." }
-    ]
-  },
-  {
-    question: "Convierte (3,-3,5) a cilíndricas (r, θ, z):",
-    options: [
-      { text: "(3√2, π/4, 5)", isCorrect: false, rationale: "x>0,y<0 => cuadrante IV." },
-      { text: "(3√2, -π/4, 5)", isCorrect: true, rationale: "r=√(3²+(-3)²)=3√2, θ=-π/4, z=5." },
-      { text: "(6, -π/4, 5)", isCorrect: false, rationale: "r mal calculado." },
-      { text: "(√6, -π/4, 5)", isCorrect: false, rationale: "Confusión en r." }
-    ]
-  },
-  {
-    question: "Superficie φ = π/4 en esféricas (convención: φ = ángulo desde el eje z)",
-    options: [
-      { text: "Un plano horizontal", isCorrect: false, rationale: "Plano horizontal sería z = c." },
-      { text: "Un cono con vértice en el origen", isCorrect: true, rationale: "φ constante define un cono." },
-      { text: "Una esfera de radio π/4", isCorrect: false, rationale: "Eso sería ρ = constante." },
-      { text: "Un cilindro", isCorrect: false, rationale: "Cilindro se asocia a r = constante." }
-    ]
-  }
+    {
+        question: "*(Teoría)* ¿Cuál es la prueba clave para demostrar que el límite $\\lim_{(x,y) \\to (a,b)} f(x, y)$ **no** existe?",
+        options: [
+            { text: "Se obtienen dos valores de límite diferentes al acercarse por dos trayectorias distintas.", rationale: "Correcto. Si el límite existe, debe ser el mismo sin importar la trayectoria de aproximación.", isCorrect: true },
+            { text: "La función $f(a, b)$ no está definida en ese punto.", rationale: "Esto no es suficiente. El límite puede existir aunque la función tenga un 'agujero' en $(a, b)$.", isCorrect: false },
+            { text: "La función no es continua en $(a, b)$.", rationale: "La no continuidad puede ser porque el límite existe pero no coincide con el valor de la función.", isCorrect: false },
+            { text: "El límite de la función es infinito.", rationale: "La prueba estándar de *no existencia* se refiere a la ambigüedad del valor (diferentes trayectorias).", isCorrect: false }
+        ],
+        hint: "Recuerda el 'test de las dos trayectorias'. ¿Qué debe pasar para que el límite falle?"
+    },
+    {
+        question: "*(Teoría)* ¿Qué implica geométricamente que una función $f(x, y)$ sea **diferenciable** en un punto $P(a, b)$?",
+        options: [
+            { text: "Que la superficie $z=f(x,y)$ tiene un plano tangente 'no vertical' en $P$.", rationale: "Exacto. La diferenciabilidad significa que la superficie es 'localmente plana' y puede ser bien aproximada por su plano tangente.", isCorrect: true },
+            { text: "Que las derivadas parciales $f_x$ y $f_y$ existen en $P$.", rationale: "La mera existencia de las parciales no es suficiente; se necesita una condición más fuerte (como su continuidad).", isCorrect: false },
+            { text: "Que la función es continua en $P$.", rationale: "La diferenciabilidad implica continuidad, pero la continuidad no implica diferenciabilidad.", isCorrect: false },
+            { text: "Que el gradiente $\\nabla f(P)$ es el vector cero.", rationale: "Esto solo significa que $P$ es un punto crítico.", isCorrect: false }
+        ],
+        hint: "Piensa en qué significa que una curva sea 'suave' (diferenciable) y extiéndelo a una superficie."
+    },
+    {
+        question: "*(Teoría)* ¿Cuál es la relación geométrica entre el gradiente $\\nabla f(P)$ y la curva de nivel $f(x, y) = k$ que pasa por $P$?",
+        options: [
+            { text: "Son paralelos.", rationale: "Incorrecto. Si fueran paralelos, el gradiente apuntaría donde la función no cambia.", isCorrect: false },
+            { text: "Son tangentes.", rationale: "El vector tangente es ortogonal al gradiente. Esta es la confusión más común.", isCorrect: false },
+            { text: "Son ortogonales (perpendiculares).", rationale: "Correcto. El gradiente (máximo cambio) es perpendicular a la curva de nivel (ningún cambio).", isCorrect: true },
+            { text: "No tienen relación geométrica.", rationale: "Tienen una de las relaciones geométricas más importantes del cálculo multivariable.", isCorrect: false }
+        ],
+        hint: "El gradiente apunta en la dirección de máxima pendiente. ¿Hacia dónde debes moverte para que la altura NO cambie?"
+    },
+    {
+        question: "*(Teoría)* El Teorema de Clairaut establece que $f_{xy} = f_{yx}$ siempre y cuando...",
+        options: [
+            { text: "Las derivadas mixtas $f_{xy}$ y $f_{yx}$ sean continuas.", rationale: "Esta es la condición clave. Si son continuas en una región, entonces deben ser iguales allí.", isCorrect: true },
+            { text: "La función $f$ sea continua.", rationale: "La continuidad de $f$ no es suficiente.", isCorrect: false },
+            { text: "La función $f$ sea diferenciable.", rationale: "La diferenciabilidad tampoco es condición suficiente para esto.", isCorrect: false },
+            { text: "Las derivadas parciales $f_x$ y $f_y$ existan.", rationale: "La sola existencia de las primeras derivadas no dice nada sobre las segundas.", isCorrect: false }
+        ],
+        hint: "¿Qué propiedad de 'suavidad' se requiere de las propias derivadas mixtas?"
+    },
+    {
+        question: "*(Teoría)* En el Test de la Segunda Derivada, si $D = f_{xx}f_{yy} - (f_{xy})^2 < 0$ en un punto crítico, el punto es:",
+        options: [
+            { text: "Un máximo local.", rationale: "Un máximo local requiere $D > 0$ y $f_{xx} < 0$.", isCorrect: false },
+            { text: "Un mínimo local.", rationale: "Un mínimo local requiere $D > 0$ y $f_{xx} > 0$.", isCorrect: false },
+            { text: "Un punto de silla.", rationale: "Correcto. Un discriminante negativo indica que la función sube en una dirección y baja en otra.", isCorrect: true },
+            { text: "El test no es concluyente.", rationale: "El test no es concluyente solo si $D = 0$.", isCorrect: false }
+        ],
+        hint: "Recuerda qué signo del discriminante $D$ implica que no hay ni máximo ni mínimo."
+    },
+    {
+        question: "*(Límites - Fácil)* Evalúe: $\\lim_{(x,y) \\to (1, 2)} \\frac{x^2 y + 1}{2x - y}$",
+        options: [
+            { text: "$\\frac{3}{0}$ (Indeterminado)", rationale: "La sustitución directa lleva a una división por cero, pero no es indeterminado 0/0.", isCorrect: false },
+            { text: "El límite no existe.", rationale: "Correcto. El numerador tiende a 3 y el denominador a 0. Un límite de la forma 'constante no nula / 0' no existe.", isCorrect: true },
+            { text: "$\\frac{3}{2}$", rationale: "Error de cálculo en el denominador.", isCorrect: false },
+            { text: "$0$", rationale: "El numerador no es cero.", isCorrect: false }
+        ],
+        hint: "Intente la sustitución directa. ¿Qué ocurre con el numerador y el denominador?"
+    },
+    {
+        question: "*(Límites - Medio)* Evalúe: $\\lim_{(x,y) \\to (0,0)} \\frac{5x^2y}{x^2 + y^2}$",
+        options: [
+            { text: "$0$", rationale: "Correcto. Usando polares: $5r\\cos^2\\theta\\sin\\theta \\to 0$ cuando $r \\to 0$.", isCorrect: true },
+            { text: "$5$", rationale: "Este valor no se obtiene por trayectorias comunes.", isCorrect: false },
+            { text: "No existe.", rationale: "El límite sí existe. El grado del numerador (3) es mayor que el del denominador (2).", isCorrect: false },
+            { text: "$\\frac{5}{2}$", rationale: "Error de evaluación.", isCorrect: false }
+        ],
+        hint: "Pruebe cambiar a coordenadas polares ($r, \\theta$) y evalúe cuando $r \\to 0$."
+    },
+    {
+        question: "*(Límites - Difícil)* Evalúe: $\\lim_{(x,y) \\to (0,0)} \\frac{x^2 y}{x^4 + y^2}$",
+        options: [
+            { text: "$0$", rationale: "Este límite se obtiene por los ejes, pero no es general.", isCorrect: false },
+            { text: "$\\frac{1}{2}$", rationale: "Este límite se obtiene por la trayectoria $y=x^2$, pero no es general.", isCorrect: false },
+            { text: "No existe.", rationale: "Correcto. Por $y=0$ da 0. Por $y=x^2$ da $1/2$. Como son diferentes, no existe.", isCorrect: true },
+            { text: "$1$", rationale: "Valor incorrecto.", isCorrect: false }
+        ],
+        hint: "Pruebe la trayectoria parabólica $y = x^2$ y compárela con la trayectoria $y=0$."
+    },
+    {
+        question: "*(Vectores - Fácil)* Encuentre la velocidad $\\mathbf{v}(t)$ para $\\mathbf{r}(t) = \\langle t^3, \\sin(2t), e^{-t} \\rangle$ en $t=0$.",
+        options: [
+            { text: "$\\langle 0, 0, 1 \\rangle$", rationale: "Esta es la posición $\\mathbf{r}(0)$.", isCorrect: false },
+            { text: "$\\langle 3t^2, 2\\cos(2t), -e^{-t} \\rangle$", rationale: "Esta es la función velocidad, pero no está evaluada en $t=0$.", isCorrect: false },
+            { text: "$\\langle 0, 2, -1 \\rangle$", rationale: "Correcto. $\\mathbf{r}'(0) = \\langle 3(0)^2, 2\\cos(0), -e^{0} \\rangle = \\langle 0, 2, -1 \\rangle$.", isCorrect: true },
+            { text: "$\\langle 0, 2, 1 \\rangle$", rationale: "Error de signo en la derivada de $e^{-t}$.", isCorrect: false }
+        ],
+        hint: "El vector velocidad es la derivada $\\mathbf{r}'(t)$. Evalúe en $t=0$."
+    },
+    {
+        question: "*(Vectores - Medio)* Encuentre el vector tangente unitario $\\mathbf{T}(t)$ para $\\mathbf{r}(t) = \\langle 3\\cos(t), 3\\sin(t), 4t \\rangle$.",
+        options: [
+            { text: "$\\langle -3\\sin(t), 3\\cos(t), 4 \\rangle$", rationale: "Este es el vector velocidad, pero no es unitario (magnitud 5).", isCorrect: false },
+            { text: "$\\frac{1}{5}\\langle -3\\sin(t), 3\\cos(t), 4 \\rangle$", rationale: "Correcto. La rapidez es $\\sqrt{9+16} = 5$. Dividimos la velocidad por 5.", isCorrect: true },
+            { text: "$\\langle -\\sin(t), \\cos(t), 0 \\rangle$", rationale: "Ignora la componente z.", isCorrect: false },
+            { text: "$\\langle \\frac{3}{5}\\cos(t), \\frac{3}{5}\\sin(t), \\frac{4}{5}t \\rangle$", rationale: "Mezcla incorrecta de posición y rapidez.", isCorrect: false }
+        ],
+        hint: "$\\mathbf{T}(t) = \\frac{\\mathbf{r}'(t)}{\\|\\mathbf{r}'(t)\\|}$. Calcule la rapidez primero."
+    },
+    {
+        question: "*(Vectores - Difícil)* Calcule la longitud de arco de $\\mathbf{r}(t) = \\langle 2t, t^2, \\frac{1}{3}t^3 \\rangle$ desde $t=0$ hasta $t=1$.",
+        options: [
+            { text: "$\\sqrt{6}$", rationale: "Esto es la rapidez en $t=1$, no la longitud total.", isCorrect: false },
+            { text: "$\\frac{4}{3}$", rationale: "Error de cálculo en la integral.", isCorrect: false },
+            { text: "$\\frac{7}{3}$", rationale: "Correcto. $\\|\\mathbf{r}'(t)\\| = 2+t^2$. La integral $\\int_0^1 (2+t^2)dt = [2t + t^3/3]_0^1 = 2 + 1/3 = 7/3$.", isCorrect: true },
+            { text: "$3$", rationale: "Error de cálculo.", isCorrect: false }
+        ],
+        hint: "La rapidez $\\|\\mathbf{r}'(t)\\|$ es un trinomio cuadrado perfecto: $\\sqrt{(2+t^2)^2}$."
+    },
+    {
+        question: "*(Derivadas - Fácil)* Encuentre $f_x$ para $f(x, y) = x^3 y^2 + 5x - y^4$.",
+        options: [
+            { text: "$3x^2 y^2 + 5$", rationale: "Correcto. Tratamos 'y' como constante. La derivada de $-y^4$ es 0.", isCorrect: true },
+            { text: "$6xy$", rationale: "Error conceptual grave en derivación parcial.", isCorrect: false },
+            { text: "$3x^2 y^2 + 5 - 4y^3$", rationale: "No debiste derivar el término $-y^4$ con respecto a x.", isCorrect: false },
+            { text: "$3x^2 y^2$", rationale: "Olvidaste derivar el término $5x$.", isCorrect: false }
+        ],
+        hint: "Para $f_x$, trate todas las 'y' como si fueran números constantes."
+    },
+    {
+        question: "*(Derivadas - Medio)* Calcule $f_{xy}$ para $f(x, y) = x^3 e^{2y} + \\sin(y)$.",
+        options: [
+            { text: "$3x^2 e^{2y}$", rationale: "Esto es solo $f_x$. Falta derivar respecto a y.", isCorrect: false },
+            { text: "$2x^3 e^{2y} + \\cos(y)$", rationale: "Esto es $f_y$.", isCorrect: false },
+            { text: "$6x^2 e^{2y}$", rationale: "Correcto. $f_x = 3x^2 e^{2y}$, luego derivamos eso respecto a y: $3x^2(2e^{2y})$.", isCorrect: true },
+            { text: "$6x^2 e^{2y} - \\sin(y)$", rationale: "El término $\\sin(y)$ ya desapareció en la primera derivada respecto a x.", isCorrect: false }
+        ],
+        hint: "Calcule $f_x$ primero, luego derive ese resultado con respecto a y."
+    },
+    {
+        question: "*(Derivadas - Difícil)* Regla de la Cadena: $w = x^2 y$, con $x = st$, $y = s/t$. Encuentre $\\frac{\\partial w}{\\partial s}$.",
+        options: [
+            { text: "$2(st)(s/t) \\cdot t + (st)^2 \\cdot (1/t)$", rationale: "Correcto. Aplicación de $\\frac{\\partial w}{\\partial x}\\frac{\\partial x}{\\partial s} + \\frac{\\partial w}{\\partial y}\\frac{\\partial y}{\\partial s}$. Simplificado es $3s^2t$.", isCorrect: true },
+            { text: "$2(st)(s/t) + (st)^2$", rationale: "Faltó multiplicar por las derivadas internas $\\frac{\\partial x}{\\partial s}$ y $\\frac{\\partial y}{\\partial s}$.", isCorrect: false },
+            { text: "$3s^2/t$", rationale: "Error en la simplificación algebraica final.", isCorrect: false },
+            { text: "$2s t (s/t) - (st)^2 (s/t^2)$", rationale: "Esta sería la derivada respecto a 't', no 's'.", isCorrect: false }
+        ],
+        hint: "Fórmula: $\\frac{\\partial w}{\\partial s} = \\frac{\\partial w}{\\partial x}\\frac{\\partial x}{\\partial s} + \\frac{\\partial w}{\\partial y}\\frac{\\partial y}{\\partial s}$."
+    },
+    {
+        question: "*(Gradiente - Fácil)* Encuentre $\\nabla f$ de $f(x, y) = x^2 y + 5y^3$ en $(1, 1)$.",
+        options: [
+            { text: "$\\langle 2, 16 \\rangle$", rationale: "Correcto. $f_x(1,1) = 2(1)(1) = 2$. $f_y(1,1) = 1^2 + 15(1)^2 = 16$.", isCorrect: true },
+            { text: "$\\langle 2, 1 \\rangle$", rationale: "Error al derivar $5y^3$.", isCorrect: false },
+            { text: "$\\langle 2x, 15y^2 \\rangle$", rationale: "Error en las parciales. $f_y$ debería ser $x^2 + 15y^2$.", isCorrect: false },
+            { text: "$18$", rationale: "El gradiente es un vector, no un número escalar.", isCorrect: false }
+        ],
+        hint: "$\\nabla f = \\langle f_x, f_y \\rangle$. Evalúe ambas derivadas en (1,1)."
+    },
+    {
+        question: "*(Gradiente - Medio)* Derivada direccional de $f(x, y) = x^2 y^3$ en $P(1, 2)$ dirección $\\mathbf{v} = \\langle 1, 1 \\rangle$.",
+        options: [
+            { text: "$14\\sqrt{2}$", rationale: "Correcto. $\\nabla f(1,2) = \\langle 16, 12 \\rangle$. Vector unitario $\\mathbf{u} = \\langle 1/\\sqrt{2}, 1/\\sqrt{2} \\rangle$. Producto punto: $28/\\sqrt{2} = 14\\sqrt{2}$.", isCorrect: true },
+            { text: "$28$", rationale: "Olvidó normalizar el vector $\\mathbf{v}$ a unitario.", isCorrect: false },
+            { text: "$\\langle 16, 12 \\rangle$", rationale: "Esto es solo el gradiente.", isCorrect: false },
+            { text: "$4/\\sqrt{2}$", rationale: "Error de cálculo.", isCorrect: false }
+        ],
+        hint: "$D_{\\mathbf{u}}f = \\nabla f \\cdot \\mathbf{u}$. ¡Asegúrese de que $\\mathbf{u}$ sea unitario!"
+    },
+    {
+        question: "*(Gradiente - Difícil)* Ecuación del plano tangente a $z = \\ln(x - 2y)$ en $(3, 1, 0)$.",
+        options: [
+            { text: "$z = (x - 3) - 2(y - 1)$", rationale: "Correcto. $f_x(3,1) = 1$, $f_y(3,1) = -2$.", isCorrect: true },
+            { text: "$z = (x - 3) + (y - 1)$", rationale: "Error en $f_y$. Olvidó la regla de la cadena (-2).", isCorrect: false },
+            { text: "$z = (x + 3) - 2(y + 1)$", rationale: "Signos incorrectos en la fórmula del punto $(x-x_0)$.", isCorrect: false },
+            { text: "$x - 2y + z = 0$", rationale: "Ecuación incorrecta del plano.", isCorrect: false }
+        ],
+        hint: "Use $z - z_0 = f_x(P_0)(x - x_0) + f_y(P_0)(y - y_0)$."
+    },
+    {
+        question: "*(Optimización - Fácil)* Si $D = 11$ y $f_{xx} = 3$ en un punto crítico, ¿qué es?",
+        options: [
+            { text: "Máximo local.", rationale: "Para máximo se requiere $f_{xx} < 0$.", isCorrect: false },
+            { text: "Mínimo local.", rationale: "Correcto. $D > 0$ y $f_{xx} > 0$ (cóncava hacia arriba) indica mínimo.", isCorrect: true },
+            { text: "Punto de silla.", rationale: "Requeriría $D < 0$.", isCorrect: false },
+            { text: "Inconcluso.", rationale: "Es concluso porque $D \\neq 0$.", isCorrect: false }
+        ],
+        hint: "$D > 0$ significa extremo. $f_{xx} > 0$ significa 'carita feliz' (cóncava arriba)."
+    },
+    {
+        question: "*(Optimización - Medio)* Punto crítico de $f(x, y) = x^2 + y^2 + 4x - 2y + 1$.",
+        options: [
+            { text: "$(-2, 1)$", rationale: "Correcto. $2x+4=0 \\to x=-2$. $2y-2=0 \\to y=1$.", isCorrect: true },
+            { text: "$(2, -1)$", rationale: "Error de signos al despejar.", isCorrect: false },
+            { text: "$(4, -2)$", rationale: "Tomó los coeficientes directamente sin derivar e igualar a cero.", isCorrect: false },
+            { text: "$(0, 0)$", rationale: "No es punto crítico porque las derivadas no son cero ahí.", isCorrect: false }
+        ],
+        hint: "Resuelva el sistema $\\nabla f = \\langle 0, 0 \\rangle$."
+    },
+    {
+        question: "*(Optimización - Difícil)* Clasifique el punto $(0,0)$ para $f(x, y) = x^3 + y^3 - 3xy$.",
+        options: [
+            { text: "Máximo local.", rationale: "$D$ es negativo aquí.", isCorrect: false },
+            { text: "Mínimo local.", rationale: "$D$ es negativo aquí.", isCorrect: false },
+            { text: "Punto de silla.", rationale: "Correcto. $D(0,0) = (0)(0) - (-3)^2 = -9$. Como $D < 0$, es silla.", isCorrect: true },
+            { text: "Inconcluso.", rationale: "Es concluso pues $D \\neq 0$.", isCorrect: false }
+        ],
+        hint: "Calcule las segundas derivadas y el discriminante $D$ en el origen."
+    }
 ];
 
+// Variables de estado
 let currentQuestionIndex = 0;
 let score = 0;
+let answered = false;
 
+// Elementos del DOM
 const questionText = document.getElementById('question-text');
-const answerOptionsContainer = document.getElementById('answer-options');
-const rationaleText = document.getElementById('rationale-text');
+const optionsContainer = document.getElementById('options-container');
 const nextBtn = document.getElementById('next-btn');
-const progressText = document.getElementById('progress-text');
-const resultsContainer = document.getElementById('results-container');
-const scoreText = document.getElementById('score-text');
-const restartBtn = document.getElementById('restart-btn');
-const questionContainer = document.getElementById('question-container');
+const feedbackSection = document.getElementById('feedback');
+const feedbackTitle = document.getElementById('feedback-title');
+const feedbackRationale = document.getElementById('feedback-rationale');
+const progressBar = document.getElementById('progress');
+const questionCounter = document.getElementById('question-counter');
+const hintText = document.getElementById('hint-text');
+const quizActive = document.getElementById('quiz-active');
+const resultsSection = document.getElementById('results');
+const finalScore = document.getElementById('final-score');
+const scoreMessage = document.getElementById('score-message');
 
-function startQuiz() {
-  currentQuestionIndex = 0;
-  score = 0;
-  resultsContainer.classList.add('hidden');
-  questionContainer.classList.remove('hidden');
-  answerOptionsContainer.classList.remove('hidden');
-  progressText.classList.remove('hidden');
-  nextBtn.classList.add('hidden');
-  showQuestion();
+// Función para iniciar/cargar pregunta
+function loadQuestion() {
+    answered = false;
+    const currentQuestion = quizData[currentQuestionIndex];
+
+    // Actualizar UI básica
+    questionCounter.textContent = `Pregunta ${currentQuestionIndex + 1} de ${quizData.length}`;
+    progressBar.style.width = `${((currentQuestionIndex) / quizData.length) * 100}%`;
+
+    // Resetear estados
+    nextBtn.style.display = 'none';
+    feedbackSection.style.display = 'none';
+    hintText.style.display = 'none';
+    optionsContainer.innerHTML = '';
+
+    // Cargar texto de pregunta y renderizar matemáticas
+    questionText.innerHTML = currentQuestion.question;
+
+    // Crear botones de opciones
+    currentQuestion.options.forEach((option, index) => {
+        const button = document.createElement('button');
+        button.className = 'option-btn';
+        button.innerHTML = option.text;
+        button.onclick = () => checkAnswer(index);
+        optionsContainer.appendChild(button);
+    });
+
+    // Decirle a MathJax que renderice las nuevas fórmulas
+    MathJax.typesetPromise();
 }
 
-function showQuestion() {
-  resetState();
-  const q = quizData[currentQuestionIndex];
-  questionText.innerHTML = `<strong>Pregunta ${currentQuestionIndex + 1}:</strong> ${q.question}`;
-  progressText.textContent = `Pregunta ${currentQuestionIndex + 1} de ${quizData.length}`;
+// Función para verificar respuesta
+function checkAnswer(selectedIndex) {
+    if (answered) return;
+    answered = true;
 
-  q.options.forEach(option => {
-    const btn = document.createElement('button');
-    btn.textContent = option.text;
-    btn.className =
-      'answer-btn w-full text-left p-4 border border-gray-300 rounded-md hover:bg-gray-100 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition';
-    btn.addEventListener('click', () => selectAnswer(btn, option));
-    answerOptionsContainer.appendChild(btn);
-  });
+    const currentQuestion = quizData[currentQuestionIndex];
+    const options = optionsContainer.children;
+    const selectedOption = currentQuestion.options[selectedIndex];
+
+    // Mostrar feedback
+    feedbackSection.style.display = 'block';
+    if (selectedOption.isCorrect) {
+        score++;
+        options[selectedIndex].classList.add('correct');
+        feedbackSection.className = 'feedback-section feedback-correct';
+        feedbackTitle.textContent = '¡Correcto! 🎉';
+    } else {
+        options[selectedIndex].classList.add('incorrect');
+        feedbackSection.className = 'feedback-section feedback-incorrect';
+        feedbackTitle.textContent = 'Incorrecto';
+        // Resaltar la correcta
+        currentQuestion.options.forEach((opt, idx) => {
+            if (opt.isCorrect) {
+                options[idx].classList.add('correct');
+            }
+        });
+    }
+
+    feedbackRationale.innerHTML = selectedOption.rationale;
+    nextBtn.style.display = 'block';
+
+    // Deshabilitar todos los botones
+    for (let btn of options) {
+        btn.disabled = true;
+    }
+
+    MathJax.typesetPromise();
 }
 
-function resetState() {
-  answerOptionsContainer.innerHTML = '';
-  rationaleText.textContent = '';
-  nextBtn.classList.add('hidden');
+// Función para mostrar pista
+function toggleHint() {
+    const currentQuestion = quizData[currentQuestionIndex];
+    if (hintText.style.display === 'none' || hintText.style.display === '') {
+        hintText.innerHTML = currentQuestion.hint;
+        hintText.style.display = 'block';
+        MathJax.typesetPromise();
+    } else {
+        hintText.style.display = 'none';
+    }
 }
 
-function selectAnswer(button, option) {
-  Array.from(answerOptionsContainer.children).forEach(btn => { btn.disabled = true; });
-
-  if (option.isCorrect) {
-    button.classList.add('correct');
-    score++;
-  } else {
-    button.classList.add('incorrect');
-    const correctOption = quizData[currentQuestionIndex].options.find(o => o.isCorrect);
-    const correctBtn = Array.from(answerOptionsContainer.children)
-      .find(b => b.textContent === correctOption.text);
-    if (correctBtn) correctBtn.classList.add('correct');
-  }
-  rationaleText.textContent = `Justificación: ${option.rationale}`;
-  nextBtn.classList.remove('hidden');
+// Función para siguiente pregunta
+function nextQuestion() {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < quizData.length) {
+        loadQuestion();
+    } else {
+        showResults();
+    }
 }
 
+// Función para mostrar resultados finales
 function showResults() {
-  questionContainer.classList.add('hidden');
-  answerOptionsContainer.classList.add('hidden');
-  progressText.classList.add('hidden');
-  nextBtn.classList.add('hidden');
-  resultsContainer.classList.remove('hidden');
-  scoreText.textContent = `Tu puntuación final es ${score} de ${quizData.length}.`;
+    quizActive.style.display = 'none';
+    resultsSection.style.display = 'block';
+    finalScore.textContent = `${score} / ${quizData.length}`;
+
+    const percentage = (score / quizData.length) * 100;
+    let message = '';
+    if (percentage >= 90) message = '¡Excelente trabajo! Estás listo para el parcial. 🌟';
+    else if (percentage >= 70) message = '¡Buen trabajo! Tienes los conceptos clave, repasa los pequeños errores. 👍';
+    else message = 'Sigue practicando. Revisa los temas donde fallaste y vuelve a intentarlo. 💪';
+
+    scoreMessage.textContent = message;
 }
 
-nextBtn.addEventListener('click', () => {
-  currentQuestionIndex++;
-  if (currentQuestionIndex < quizData.length) {
-    showQuestion();
-  } else {
-    showResults();
-  }
-});
-
-restartBtn.addEventListener('click', startQuiz);
-window.addEventListener('DOMContentLoaded', startQuiz);
+// Iniciar el quiz
+loadQuestion();
 </script>
-
 </body>
 </html>
