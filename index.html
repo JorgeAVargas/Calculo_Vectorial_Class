@@ -155,18 +155,7 @@
                 rationale: "$\\int_0^1 [x^2 \\frac{y^2}{2}]_0^2 \\,dx = \\int_0^1 (x^2 \\cdot 2) \\,dx = \\int_0^1 2x^2 \\,dx = [\\frac{2x^3}{3}]_0^1 = 2/3$."
             },
             {
-                question: "3. Evalúe la integral $\\int_0^1 \\int_0^x (2x + 4y) \\,dy \\,dx$",
-                answers: {
-                    a: "$1$",
-                    b: "$2/3$",
-                    c: "$4/3$",
-                    d: "$1/2$"
-                },
-                correctAnswer: "a",
-                rationale: "Int. Interna: $[2xy + 2y^2]_0^x = 2x(x) + 2(x^2) = 4x^2$. Int. Externa: $\\int_0^1 4x^2 \\,dx = [\\frac{4x^3}{3}]_0^1 = 4/3$. ¡Espera! Revisemos. $[2xy + 2y^2]_0^x = 2x^2 + 2x^2 = 4x^2$. $\\int_0^1 4x^2 dx = [4x^3/3]_0^1 = 4/3$. (Corrigiendo la clave) La respuesta correcta es 4/3. A ver... $2xy + 2y^2$ ... $2x(x) + 2(x^2) = 4x^2$. $\\int_0^1 4x^2 dx = 4/3$. OK, la respuesta 'a' estaba mal. Cambiemos la pregunta para que la respuesta sea 1. $\\int_0^1 \\int_0^x (x+y) \\,dy \\,dx$. Int Interna: $[xy + y^2/2]_0^x = x^2 + x^2/2 = 3x^2/2$. Int Externa: $\\int_0^1 (3x^2/2) \\,dx = [3x^3/6]_0^1 = [x^3/2]_0^1 = 1/2$. OK, esta es la pregunta 'd'. Usemos $\\int_0^1 \\int_0^x (3x) \\,dy \\,dx$. Int Interna: $[3xy]_0^x = 3x^2$. Int Externa: $\\int_0^1 3x^2 \\,dx = [x^3]_0^1 = 1$. Listo."
-            },
-            {
-                question: "3. (Corregida) Evalúe la integral $\\int_0^1 \\int_0^x (3x) \\,dy \\,dx$",
+                question: "3. Evalúe la integral $\\int_0^1 \\int_0^x (3x) \\,dy \\,dx$",
                 answers: {
                     a: "$1$",
                     b: "$3/2$",
@@ -196,7 +185,7 @@
                     d: "$\\int_0^2 \\int_x^2 f(x,y) \\,dx \\,dy$"
                 },
                 correctAnswer: "a",
-                rationale: "La región $D$ es $0 \\le x \\le 2$ y $0 \\le y \\le x^2$. $y$ va de $0$ a $2^2=4$. Para $y$ fija, $x$ va de $y=x^2 \\implies x=\\sqrt{y}$ hasta $x=2$."
+                rationale: "La región $D$ es $0 \\le x \\le 2$ y $0 \\le y \\le x^2$. $y$ va de $0$ a $2^2=4$. Para $y$ fija, $x$ va de $y=x^2 \\implies x=\\sqrt{y}$ (límite izquierdo) hasta $x=2$ (límite derecho)."
             },
             {
                 question: "6. Evalúe $\\int_0^1 \\int_y^1 e^{x^2} \\,dx \\,dy$ (Ayuda: cambie el orden)",
@@ -218,7 +207,7 @@
                     d: "$\\int_0^1 \\int_0^x y \\,dy \\,dx$"
                 },
                 correctAnswer: "a",
-                rationale: "El área es $\\iint_D 1 \\,dA$. Las curvas se cortan en $x=0, 1$. En $[0,1]$, $y=x$ (techo) está arriba de $y=x^2$ (piso)."
+                rationale: "El área es $\\iint_D 1 \\,dA$. Las curvas se cortan en $x=0, 1$. En $[0,1]$, $y=x$ ('techo') está arriba de $y=x^2$ ('piso')."
             },
             // --- BLOQUE 2: INTEGRALES DOBLES (POLARES) ---
             {
@@ -303,13 +292,13 @@
             {
                 question: "15. ¿Qué representa $\\iiint_E 1 \\,dV$?",
                 answers: {
-                    a: "La masa del sólido $E$ (si $\\rho=1$).",
+                    a: "La masa del sólido $E$ (solo si $\\rho=1$).",
                     b: "El volumen del sólido $E$.",
                     c: "El área de la superficie del sólido $E$.",
                     d: "Ambas (a) y (b) son correctas."
                 },
                 correctAnswer: "d",
-                rationale: "Integrar $f=1$ sobre una región $E$ suma todos los elementos de volumen $dV$, dando el volumen total $V$. Si la densidad $\\rho=1$, la masa $m = \\iiint_E 1 \\,dV = V$."
+                rationale: "Por definición, $\\iiint_E 1 \\,dV$ es el Volumen. Y si la masa $m = \\iiint_E \\rho \\,dV$ y $\\rho=1$, entonces $m$ también es $\\iiint_E 1 \\,dV$."
             },
             {
                 question: "16. Evalúe $\\int_0^1 \\int_0^1 \\int_0^1 (x) \\,dx \\,dy \\,dz$.",
@@ -365,7 +354,7 @@
                     d: "Un círculo de radio 5 en el plano $xy$."
                 },
                 correctAnswer: "c",
-                rationale: "$r = \\sqrt{x^2+y^2}$, así que $r=5$ es $x^2+y^2=25$. Como $z$ es libre, se extiende verticalmente como un cilindro."
+                rationale: "$r = \\sqrt{x^2+y^2}$, así que $r=5$ es $x^2+y^2=25$. Como $z$ es libre (no está en la ecuación), se extiende verticalmente como un cilindro."
             },
             {
                 question: "21. ¿Qué integral cilíndrica calcula el volumen del sólido acotado por el paraboloide $z=x^2+y^2$ y el plano $z=4$?",
@@ -376,7 +365,7 @@
                     d: "$\\int_0^{2\\pi} \\int_0^2 \\int_0^{r^2} r \\,dz \\,dr \\,d\\theta$"
                 },
                 correctAnswer: "b",
-                rationale: "En cilíndricas, $z=r^2$ (piso) y $z=4$ (techo). Se cortan en $r^2=4 \\implies r=2$. La región $D$ es el círculo $0 \\le r \\le 2$, $0 \\le \\theta \\le 2\\pi$."
+                rationale: "En cilíndricas, el 'piso' es $z=r^2$ y el 'techo' es $z=4$. Se cortan en $r^2=4 \\implies r=2$. La región $D$ es el círculo $0 \\le r \\le 2$, $0 \\le \\theta \\le 2\\pi$. El $dV$ es $r \\,dz \\,dr \\,d\\theta$."
             },
             {
                 question: "22. Evalúe la integral del problema anterior: $\\int_0^{2\\pi} \\int_0^2 \\int_{r^2}^4 r \\,dz \\,dr \\,d\\theta$.",
@@ -399,7 +388,7 @@
                     d: "$\\rho^2 \\sin\\phi \\,d\\rho \\,d\\phi \\,d\\theta$"
                 },
                 correctAnswer: "d",
-                rationale: "El Jacobiano para el cambio a esféricas es $\\rho^2 \\sin\\phi$."
+                rationale: "El Jacobiano (determinante de la matriz Jacobiana) para el cambio a esféricas es $\\rho^2 \\sin\\phi$."
             },
             {
                 question: "24. ¿Qué superficie representa $\\phi = \\pi/2$ en coordenadas esféricas?",
@@ -410,7 +399,7 @@
                     d: "Una esfera."
                 },
                 correctAnswer: "b",
-                rationale: "$\\phi$ es el ángulo desde el eje $z$ positivo. Un ángulo de $\\pi/2$ (90°) corresponde al ecuador, que es el plano $xy$."
+                rationale: "$\\phi$ es el ángulo desde el eje $z$ positivo. Un ángulo de $\\pi/2$ (90°) corresponde al 'ecuador', que es el plano $xy$."
             },
             {
                 question: "25. ¿Qué integral esférica calcula el volumen de la esfera $x^2+y^2+z^2 \\le 4$?",
@@ -421,7 +410,7 @@
                     d: "$\\int_0^{2\\pi} \\int_0^{\\pi} \\int_0^2 1 \\,d\\rho \\,d\\phi \\,d\\theta$"
                 },
                 correctAnswer: "a",
-                rationale: "Una esfera de radio $a$ es $0 \\le \\rho \le a$, $0 \\le \\phi \le \\pi$ (de polo a polo), $0 \\le \\theta \le 2\\pi$ (vuelta completa). Aquí $a=2$. Y $dV = \\rho^2 \\sin\\phi \\,d\\rho \\,d\\phi \\,d\\theta$."
+                rationale: "Una esfera de radio $a$ ($a=2$) se describe por $0 \\le \\rho \le 2$. Para cubrir la esfera completa, $\\phi$ va de polo a polo ($0 \\le \\phi \le \\pi$) y $\\theta$ da la vuelta completa ($0 \\le \\theta \le 2\\pi$). El $dV$ es $\\rho^2 \\sin\\phi \\,d\\rho \\,d\\phi \\,d\\theta$."
             }
         ];
 
@@ -495,8 +484,32 @@
         // Event Listener para el botón de enviar
         submitButton.addEventListener('click', (e) => {
             e.preventDefault(); // Evitar que el formulario se envíe
-            showResults();
+            // Recargar MathJax para renderizar el LaTeX en la retroalimentación
+            if (window.MathJax) {
+                window.MathJax.typesetPromise().then(() => {
+                    showResults();
+                    window.MathJax.typesetPromise();
+                }).catch((err) => console.log(err.message));
+            } else {
+                showResults();
+            }
         });
+
+        // Asegurarse de que MathJax esté listo antes de construir el quiz
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            },
+            svg: {
+                fontCache: 'global'
+            },
+            startup: {
+                ready: () => {
+                    window.MathJax.startup.defaultReady();
+                    buildQuiz(); // Construir el quiz después de que MathJax esté listo
+                }
+            }
+        };
 
     </script>
 
