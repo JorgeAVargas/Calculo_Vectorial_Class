@@ -4,7 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Práctica Segundo Parcial - Cálculo Vectorial UNIVA</title>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']] // Habilitar delimitadores $...$
+        },
+        startup: {
+            ready: () => {
+                console.log('MathJax está listo.');
+                window.MathJax.startup.defaultReady();
+                
+                // 2. Construir el quiz AHORA que MathJax está listo
+                buildQuiz();
+                
+                // 3. Renderizar el quiz inicial que acabamos de construir
+                console.log('Renderizando quiz inicial...');
+                window.MathJax.typesetPromise();
+
+                // 4. Adjuntar el listener AHORA que el botón existe
+                const submitButton = document.getElementById('submit-btn');
+                submitButton.addEventListener('click', (e) => {
+                    e.preventDefault(); // Evitar que el formulario se envíe
+                    
+                    // a. Mostrar los resultados (esto añade nuevo HTML)
+                    showResults(); 
+
+                    // b. Pedir a MathJax que renderice el *nuevo* contenido (la retroalimentación)
+                    console.log('Renderizando retroalimentación...');
+                    window.MathJax.typesetPromise();
+                });
+            }
+        }
+    };
+    </script>
+    
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     <style>
@@ -129,7 +163,7 @@
 
     <script>
         // --- Definición de las Preguntas ---
-        // Basado en el plan didáctico (Semanas 6-9)
+        // (Note cómo '\\' escapa a '\' para que JS lo lea correctamente)
         const quizData = [
             // --- BLOQUE 1: INTEGRALES DOBLES (CARTESIANAS) ---
             {
@@ -410,17 +444,19 @@
                     d: "$\\int_0^{2\\pi} \\int_0^{\\pi} \\int_0^2 1 \\,d\\rho \\,d\\phi \\,d\\theta$"
                 },
                 correctAnswer: "a",
-                rationale: "Una esfera de radio $a$ ($a=2$) se describe por $0 \\le \\rho \le 2$. Para cubrir la esfera completa, $\\phi$ va de polo a polo ($0 \\le \\phi \le \\pi$) y $\\theta$ da la vuelta completa ($0 \\le \\theta \le 2\\pi$). El $dV$ es $\\rho^2 \\sin\\phi \\,d\\rho \\,d\\phi \\,d\\theta$."
+                rationale: "Una esfera de radio $a$ ($a=2$) se describe por $0 \\le \\rho \le 2$. Para cubrir la esfera completa, $\\phi$ va de polo a polo ($0 \\le \\phi \\le \\pi$) y $\\theta$ da la vuelta completa ($0 \\le \\theta \le 2\\pi$). El $dV$ es $\\rho^2 \\sin\\phi \\,d\\rho \\,d\\phi \\,d\\theta$."
             }
         ];
 
-        // --- Lógica del Quiz ---
-
+        // --- Definición de Funciones ---
+        
+        // Estas variables deben ser accesibles globalmente para las funciones
         const quizForm = document.getElementById('quiz-form');
-        const submitButton = document.getElementById('submit-btn');
         const resultsContainer = document.getElementById('results-container');
 
-        // Construir el HTML del quiz
+        /**
+         * Construye el HTML del quiz a partir del array quizData
+         */
         function buildQuiz() {
             const output = [];
             quizData.forEach((currentQuestion, questionIndex) => {
@@ -447,7 +483,9 @@
             quizForm.innerHTML = output.join('');
         }
 
-        // Mostrar resultados
+        /**
+         * Muestra los resultados, comprueba las respuestas y da retroalimentación
+         */
         function showResults() {
             const answerContainers = quizForm.querySelectorAll('.answers');
             let numCorrect = 0;
@@ -462,6 +500,7 @@
                 feedbackEl.style.display = 'none';
                 feedbackEl.classList.remove('correct', 'incorrect');
 
+                // Comprobar la respuesta
                 if (userAnswer === currentQuestion.correctAnswer) {
                     numCorrect++;
                     feedbackEl.innerHTML = `<strong>Correcto.</strong> ${currentQuestion.rationale}`;
@@ -473,45 +512,15 @@
                 feedbackEl.style.display = 'block';
             });
 
+            // Mostrar el puntaje final
             resultsContainer.innerHTML = `Obtuviste ${numCorrect} de ${quizData.length} respuestas correctas.`;
             resultsContainer.style.display = 'block';
-            window.scrollTo(0, document.body.scrollHeight); // Scroll al final
         }
-
-        // --- Inicializar ---
-        buildQuiz();
-
-        // Event Listener para el botón de enviar
-        submitButton.addEventListener('click', (e) => {
-            e.preventDefault(); // Evitar que el formulario se envíe
-            // Recargar MathJax para renderizar el LaTeX en la retroalimentación
-            if (window.MathJax) {
-                window.MathJax.typesetPromise().then(() => {
-                    showResults();
-                    window.MathJax.typesetPromise();
-                }).catch((err) => console.log(err.message));
-            } else {
-                showResults();
-            }
-        });
-
-        // Asegurarse de que MathJax esté listo antes de construir el quiz
-        window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']]
-            },
-            svg: {
-                fontCache: 'global'
-            },
-            startup: {
-                ready: () => {
-                    window.MathJax.startup.defaultReady();
-                    buildQuiz(); // Construir el quiz después de que MathJax esté listo
-                }
-            }
-        };
-
+        
+        // NOTA: El listener para el botón 'submit-btn' se adjunta 
+        // en la configuración de MathJax en el <head> para asegurar que
+        // todo esté cargado y listo.
+        
     </script>
-
 </body>
 </html>
