@@ -1,298 +1,730 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Repaso General: Integrales Múltiples a Green - UNIVA</title>
-    
-    <script>
-    window.MathJax = {
-        tex: {
-            inlineMath: [['$', '$'], ['\\(', '\\)']]
-        },
-        startup: {
-            ready: () => {
-                console.log('MathJax está listo.');
-                window.MathJax.startup.defaultReady();
-                buildQuiz();
-                window.MathJax.typesetPromise();
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Repaso Examen Mecánica (Cap. 1–3) — Quiz Opción Múltiple</title>
 
-                const submitButton = document.getElementById('submit-btn');
-                submitButton.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    showResults(); 
-                    window.MathJax.typesetPromise();
-                });
-            }
-        }
-    };
-    </script>
-    
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; line-height: 1.6; }
-        h1, h2 { color: #003366; border-bottom: 2px solid #0056a8; padding-bottom: 5px; }
-        #quiz-container { max-width: 850px; margin: 20px auto; background-color: #ffffff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 25px 40px; }
-        .question { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px dashed #ccc; }
-        .question-number { font-weight: bold; font-size: 1.2em; color: #0056a8; margin-bottom: 5px; }
-        .section-header { background-color: #eef5fb; padding: 10px; border-left: 5px solid #0056a8; margin: 30px 0 20px 0; font-weight: bold; color: #003366; }
-        .question-text { font-size: 1.1em; margin: 10px 0; }
-        .answers { list-style-type: none; padding: 0; margin: 0; }
-        .answers li { padding: 12px; background-color: #f9f9f9; border: 1px solid #eee; border-radius: 5px; margin-top: 8px; cursor: pointer; transition: background-color 0.2s, border-color 0.2s; }
-        .answers li:hover { background-color: #e6f0fa; border-color: #b3d1f0; }
-        .answers input[type="radio"] { margin-right: 15px; transform: scale(1.2); }
-        #submit-btn { display: block; width: 100%; padding: 15px; font-size: 1.2em; font-weight: bold; color: #ffffff; background-color: #007bff; border: none; border-radius: 5px; cursor: pointer; margin-top: 30px; transition: background-color 0.3s; }
-        #submit-btn:hover { background-color: #0056a8; }
-        #results-container { margin-top: 30px; padding: 20px; border-radius: 8px; background-color: #e6f7ff; border: 1px solid #b3e0ff; font-size: 1.2em; font-weight: bold; text-align: center; display: none; }
-        .feedback { margin-top: 15px; padding: 10px; border-radius: 5px; display: none; font-size: 0.95em; }
-        .feedback.correct { background-color: #e6ffed; border: 1px solid #b3ffc6; color: #006622; }
-        .feedback.incorrect { background-color: #ffe6e6; border: 1px solid #ffb3b3; color: #800000; }
-    </style>
+  <style>
+    :root{
+      --primary-color:#004085;
+      --secondary-color:#f8f9fa;
+      --accent-color:#c82333;
+      --correct-color:#28a745;
+      --wrong-color:#dc3545;
+      --text-color:#212529;
+      --muted:#6c757d;
+      --card-shadow:0 2px 6px rgba(0,0,0,0.06);
+    }
+    body{
+      font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+      line-height:1.6;
+      color:var(--text-color);
+      background:#e9ecef;
+      margin:0;
+      padding:20px;
+    }
+    .container{
+      max-width:980px;
+      margin:0 auto;
+      background:white;
+      padding:40px;
+      border-radius:10px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    }
+    header{
+      text-align:center;
+      margin-bottom:30px;
+      border-bottom:3px solid var(--primary-color);
+      padding-bottom:18px;
+    }
+    h1{ color:var(--primary-color); margin:0; }
+    header p{ margin:8px 0 0; color:var(--muted); }
+
+    .section-title{
+      background:var(--primary-color);
+      color:white;
+      padding:10px 18px;
+      border-radius:6px;
+      margin-top:34px;
+      margin-bottom:16px;
+    }
+    .section-note{
+      margin:0 0 16px;
+      color:var(--muted);
+      font-style:italic;
+    }
+
+    .problem-card{
+      background:white;
+      border-left:5px solid var(--primary-color);
+      border-radius:6px;
+      padding:18px 18px 14px;
+      margin-bottom:16px;
+      box-shadow:var(--card-shadow);
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .problem-card:hover{
+      transform:translateX(4px);
+      box-shadow:0 6px 16px rgba(0,0,0,0.10);
+    }
+    .problem-type-tag{
+      font-size:.75em;
+      text-transform:uppercase;
+      background:#e2e6ea;
+      padding:2px 6px;
+      border-radius:3px;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .problem-statement{
+      font-weight:600;
+      font-size:1.04em;
+      margin:10px 0 10px;
+    }
+
+    .choices{
+      margin:8px 0 10px;
+      padding:0;
+      list-style:none;
+    }
+    .choice{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:8px 10px;
+      border:1px solid #e9ecef;
+      border-radius:6px;
+      margin-bottom:8px;
+      background:#fbfcfd;
+    }
+    .choice input{ margin-top:3px; }
+    .choice label{
+      cursor:pointer;
+      flex:1;
+    }
+    .choice.correct{
+      border-color:rgba(40,167,69,.45);
+      background:rgba(40,167,69,.10);
+    }
+    .choice.wrong{
+      border-color:rgba(220,53,69,.45);
+      background:rgba(220,53,69,.08);
+    }
+
+    .btn{
+      background:var(--primary-color);
+      color:white;
+      border:none;
+      padding:8px 14px;
+      border-radius:5px;
+      cursor:pointer;
+      font-size:.92em;
+      transition:background .2s;
+      display:inline-block;
+      margin-right:8px;
+    }
+    .btn:hover{ background:#002752; }
+    .btn:disabled{
+      opacity:.6;
+      cursor:not-allowed;
+    }
+
+    .solution-area{
+      display:none;
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:6px;
+      border:1px solid #c3e6cb;
+      background:#d4edda;
+      color:#155724;
+    }
+    .solution-area.wrong{
+      border-color:#f5c6cb;
+      background:#f8d7da;
+      color:#721c24;
+    }
+    .explanation-title{
+      font-weight:800;
+      display:block;
+      margin-bottom:6px;
+    }
+    .tiny{
+      color:var(--muted);
+      font-size:.92em;
+      margin-top:6px;
+    }
+
+    /* Práctica en rojo */
+    .numeric-card{ border-left-color:var(--accent-color); }
+    .numeric-card .btn{ background:var(--accent-color); }
+    .numeric-card .btn:hover{ background:#bd2130; }
+
+    footer{
+      text-align:center;
+      margin-top:34px;
+      font-size:.86em;
+      color:var(--muted);
+      border-top:1px solid #dee2e6;
+      padding-top:16px;
+    }
+  </style>
 </head>
+
 <body>
+<div class="container">
+  <header>
+    <h1>Repaso Examen Departamental — Mecánica</h1>
+    <p>Basado en Sears & Zemansky, Física Universitaria Vol. 1 (Capítulos 1–3)</p>
+  </header>
 
-    <div id="quiz-container">
-        <h1>Repaso para Examen Parcial</h1>
-        <h2>Cálculo Vectorial (Stewart Caps. 15 y 16)</h2>
-        <p>Este quiz cubre desde Integrales Múltiples hasta el Teorema de Green. Seleccione la respuesta correcta.</p>
-        
-        <form id="quiz-form">
-            </form>
+  <h2 class="section-title">Tema 1: Unidades, Cantidades Físicas y Vectores</h2>
+  <p class="section-note">Preguntas teóricas (1-7) y de práctica (8-10). Selecciona tu respuesta y verifica.</p>
 
-        <button id="submit-btn">Enviar Respuestas</button>
-        <div id="results-container"></div>
+  <div class="problem-card" data-qid="t1_1" data-answer="b">
+    <span class="problem-type-tag">Conceptos</span>
+    <div class="problem-statement">1. ¿Cuál de las siguientes es una magnitud estrictamente vectorial?</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t1_1" id="t1_1a" value="a"><label for="t1_1a">La masa</label></li>
+      <li class="choice"><input type="radio" name="t1_1" id="t1_1b" value="b"><label for="t1_1b">El desplazamiento</label></li>
+      <li class="choice"><input type="radio" name="t1_1" id="t1_1c" value="c"><label for="t1_1c">La temperatura</label></li>
+      <li class="choice"><input type="radio" name="t1_1" id="t1_1d" value="d"><label for="t1_1d">El tiempo</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t1_1')">Verificar</button>
+    <div id="sol-t1_1" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: El desplazamiento</span>
+      El desplazamiento describe el cambio de posición de una partícula y requiere una magnitud y una dirección espacial para estar completamente definido.
     </div>
+  </div>
 
-    <script>
-        const quizData = [
-            // --- BLOQUE 1: INTEGRALES DOBLES (CARTESIANAS) ---
-            { question: "1. ¿Qué nos permite afirmar el Teorema de Fubini sobre una integral doble en una región rectangular $D = [a,b] \\times [c,d]$?",
-              answers: { a: "Que la integral debe resolverse en coordenadas polares.", b: "Que podemos evaluarla como una integral iterada en cualquier orden ($dx\\,dy$ o $dy\\,dx$).", c: "Que el resultado de la integral siempre es el área de $D$.", d: "Que la función $f(x,y)$ debe ser una constante." },
-              correctAnswer: "b", rationale: "El Teorema de Fubini justifica el intercambio del orden de integración si la función es continua en el rectángulo." },
-            
-            { question: "2. Evalúe la integral iterada: $\\int_0^1 \\int_0^2 (x^2 y) \\,dy \\,dx$",
-              answers: { a: "$1/3$", b: "$2/3$", c: "$2$", d: "$4/3$" },
-              correctAnswer: "b", rationale: "$\\int_0^1 [x^2 \\frac{y^2}{2}]_0^2 \\,dx = \\int_0^1 2x^2 \\,dx = [\\frac{2x^3}{3}]_0^1 = 2/3$." },
+  <div class="problem-card" data-qid="t1_2" data-answer="c">
+    <span class="problem-type-tag">Cifras Significativas</span>
+    <div class="problem-statement">2. Al sumar los valores medidos \( 12.3 \) y \( 3.14 \), ¿cómo debe reportarse el resultado final según las reglas de cifras significativas?</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t1_2" id="t1_2a" value="a"><label for="t1_2a">\( 15.44 \)</label></li>
+      <li class="choice"><input type="radio" name="t1_2" id="t1_2b" value="b"><label for="t1_2b">\( 15 \)</label></li>
+      <li class="choice"><input type="radio" name="t1_2" id="t1_2c" value="c"><label for="t1_2c">\( 15.4 \)</label></li>
+      <li class="choice"><input type="radio" name="t1_2" id="t1_2d" value="d"><label for="t1_2d">\( 15.440 \)</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t1_2')">Verificar</button>
+    <div id="sol-t1_2" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: \( 15.4 \)</span>
+      En las sumas y restas, el resultado no debe tener más posiciones decimales que el término con menor número de posiciones decimales. (\(12.3\) tiene un decimal).
+    </div>
+  </div>
 
-            { question: "3. Evalúe la integral $\\int_0^1 \\int_0^x (3x) \\,dy \\,dx$",
-              answers: { a: "$1$", b: "$3/2$", c: "$1/2$", d: "$2/3$" },
-              correctAnswer: "a", rationale: "Int. interna: $3xy |_0^x = 3x^2$. Int. externa: $\\int_0^1 3x^2 dx = x^3 |_0^1 = 1$." },
+  <div class="problem-card" data-qid="t1_3" data-answer="d">
+    <span class="problem-type-tag">Vectores</span>
+    <div class="problem-statement">3. ¿Qué define de forma precisa a un vector unitario?</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t1_3" id="t1_3a" value="a"><label for="t1_3a">Un vector que apunta exclusivamente en el eje x.</label></li>
+      <li class="choice"><input type="radio" name="t1_3" id="t1_3b" value="b"><label for="t1_3b">Un vector con magnitud igual a cero.</label></li>
+      <li class="choice"><input type="radio" name="t1_3" id="t1_3c" value="c"><label for="t1_3c">Un vector cuyas componentes siempre son enteras.</label></li>
+      <li class="choice"><input type="radio" name="t1_3" id="t1_3d" value="d"><label for="t1_3d">Un vector sin unidades físicas cuya magnitud es exactamente uno.</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t1_3')">Verificar</button>
+    <div id="sol-t1_3" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: Un vector sin unidades físicas cuya magnitud es exactamente uno.</span>
+      Sirven puramente para indicar una dirección en el espacio sin alterar magnitudes ni añadir unidades de medida.
+    </div>
+  </div>
 
-            { question: "4. ¿Cuál es el principal motivo para cambiar el orden de integración en $\\int_a^b \\int_{g_1(x)}^{g_2(x)} f(x,y) \\,dy \\,dx$?",
-              answers: { a: "La región de integración es un círculo.", b: "La integral $\\int f(x,y) \\,dy$ es muy difícil o imposible de resolver elementalmente.", c: "El Teorema de Fubini no se aplica a regiones no rectangulares.", d: "Para que el resultado sea positivo." },
-              correctAnswer: "b", rationale: "A veces la antiderivada interna no existe en términos de funciones elementales (ej. $e^{y^2}$), y cambiar el orden lo hace soluble." },
+  <div class="problem-card" data-qid="t1_4" data-answer="b">
+    <span class="problem-type-tag">Álgebra Vectorial</span>
+    <div class="problem-statement">4. Si el producto escalar (punto) de dos vectores no nulos es cero (\( \vec{A} \cdot \vec{B} = 0 \)), entonces los vectores:</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t1_4" id="t1_4a" value="a"><label for="t1_4a">Son paralelos.</label></li>
+      <li class="choice"><input type="radio" name="t1_4" id="t1_4b" value="b"><label for="t1_4b">Son perpendiculares (ortogonales) entre sí.</label></li>
+      <li class="choice"><input type="radio" name="t1_4" id="t1_4c" value="c"><label for="t1_4c">Tienen la misma magnitud.</label></li>
+      <li class="choice"><input type="radio" name="t1_4" id="t1_4d" value="d"><label for="t1_4d">Apuntan en direcciones opuestas.</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t1_4')">Verificar</button>
+    <div id="sol-t1_4" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: Son perpendiculares.</span>
+      Por definición, \( \vec{A} \cdot \vec{B} = |\vec{A}||\vec{B}| \cos \phi \). Si el producto es cero y las magnitudes no son cero, \(\cos \phi = 0\), lo cual implica que el ángulo \(\phi = 90^\circ\).
+    </div>
+  </div>
 
-            { question: "5. Al cambiar el orden de $\\int_0^2 \\int_0^{x^2} f(x,y) \\,dy \\,dx$, se obtiene:",
-              answers: { a: "$\\int_0^4 \\int_{\\sqrt{y}}^2 f(x,y) \\,dx \\,dy$", b: "$\\int_0^2 \\int_0^{\\sqrt{y}} f(x,y) \\,dx \\,dy$", c: "$\\int_0^4 \\int_0^{\\sqrt{y}} f(x,y) \\,dx \\,dy$", d: "$\\int_0^2 \\int_x^2 f(x,y) \\,dx \\,dy$" },
-              correctAnswer: "a", rationale: "La región es $0 \\le x \\le 2, 0 \\le y \\le x^2$. En $y$, va de 0 a 4. Horizontalmente, $x$ va desde la curva $x=\\sqrt{y}$ hasta la recta $x=2$." },
+  <div class="problem-card" data-qid="t1_5" data-answer="a">
+    <span class="problem-type-tag">Álgebra Vectorial</span>
+    <div class="problem-statement">5. La dirección del vector resultante del producto cruz \( \vec{C} = \vec{A} \times \vec{B} \) está determinada por:</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t1_5" id="t1_5a" value="a"><label for="t1_5a">La regla de la mano derecha.</label></li>
+      <li class="choice"><input type="radio" name="t1_5" id="t1_5b" value="b"><label for="t1_5b">El vector de mayor magnitud.</label></li>
+      <li class="choice"><input type="radio" name="t1_5" id="t1_5c" value="c"><label for="t1_5c">La dirección del vector \( \vec{A} \).</label></li>
+      <li class="choice"><input type="radio" name="t1_5" id="t1_5d" value="d"><label for="t1_5d">El producto escalar de ambos vectores.</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t1_5')">Verificar</button>
+    <div id="sol-t1_5" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: La regla de la mano derecha.</span>
+      
+      La regla de la mano derecha define una dirección siempre perpendicular al plano formado por los vectores \(\vec{A}\) y \(\vec{B}\).
+    </div>
+  </div>
 
-            { question: "6. Evalúe $\\int_0^1 \\int_y^1 e^{x^2} \\,dx \\,dy$ (Ayuda: cambie el orden)",
-              answers: { a: "$e-1$", b: "$2e$", c: "$e$", d: "$\\frac{1}{2}(e-1)$" },
-              correctAnswer: "d", rationale: "Cambiando orden: $\\int_0^1 \\int_0^x e^{x^2} dy dx = \\int_0^1 x e^{x^2} dx$. Con $u=x^2$, da $\\frac{1}{2}(e-1)$." },
+  <div class="problem-card" data-qid="t1_6" data-answer="a">
+    <span class="problem-type-tag">Vectores</span>
+    <div class="problem-statement">6. ¿Es cierta la propiedad conmutativa para la suma de vectores y el producto cruz?</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t1_6" id="t1_6a" value="a"><label for="t1_6a">La suma es conmutativa, el producto cruz anticonmutativo.</label></li>
+      <li class="choice"><input type="radio" name="t1_6" id="t1_6b" value="b"><label for="t1_6b">Ambas operaciones son conmutativas.</label></li>
+      <li class="choice"><input type="radio" name="t1_6" id="t1_6c" value="c"><label for="t1_6c">Ambas operaciones son anticonmutativas.</label></li>
+      <li class="choice"><input type="radio" name="t1_6" id="t1_6d" value="d"><label for="t1_6d">La suma es anticonmutativa, el producto cruz conmutativo.</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t1_6')">Verificar</button>
+    <div id="sol-t1_6" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: La suma es conmutativa, el producto cruz anticonmutativo.</span>
+      \(\vec{A} + \vec{B} = \vec{B} + \vec{A}\), pero \(\vec{A} \times \vec{B} = - (\vec{B} \times \vec{A})\).
+    </div>
+  </div>
 
-            { question: "7. ¿Qué integral calcula el área de la región $D$ acotada por $y=x$ y $y=x^2$?",
-              answers: { a: "$\\int_0^1 \\int_{x^2}^x 1 \\,dy \\,dx$", b: "$\\int_0^1 \\int_x^{x^2} 1 \\,dy \\,dx$", c: "$\\int_0^1 \\int_{x^2}^x x \\,dy \\,dx$", d: "$\\int_0^1 \\int_0^x y \\,dy \\,dx$" },
-              correctAnswer: "a", rationale: "En $[0,1]$, $y=x$ está por encima de $y=x^2$. Área = $\\iint 1 dA$." },
+  <div class="problem-card" data-qid="t1_7" data-answer="d">
+    <span class="problem-type-tag">Sistemas de Unidades</span>
+    <div class="problem-statement">7. ¿Cuáles de las siguientes son unidades fundamentales en el Sistema Internacional (SI)?</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t1_7" id="t1_7a" value="a"><label for="t1_7a">Newton, Segundo, Metro</label></li>
+      <li class="choice"><input type="radio" name="t1_7" id="t1_7b" value="b"><label for="t1_7b">Gramo, Centímetro, Segundo</label></li>
+      <li class="choice"><input type="radio" name="t1_7" id="t1_7c" value="c"><label for="t1_7c">Joule, Kilogramo, Metro</label></li>
+      <li class="choice"><input type="radio" name="t1_7" id="t1_7d" value="d"><label for="t1_7d">Kilogramo, Metro, Segundo</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t1_7')">Verificar</button>
+    <div id="sol-t1_7" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: Kilogramo, Metro, Segundo</span>
+      El Newton y el Joule son unidades derivadas en el SI. El gramo y centímetro pertenecen al sistema cgs.
+    </div>
+  </div>
 
-            // --- BLOQUE 2: POLARES ---
-            { question: "8. ¿Cuál es el diferencial de área $dA$ en coordenadas polares?",
-              answers: { a: "$dr \\,d\\theta$", b: "$r \\,dr \\,d\\theta$", c: "$r^2 \\,dr \\,d\\theta$", d: "$\\sin\\phi \\,dr \\,d\\theta$" },
-              correctAnswer: "b", rationale: "El Jacobiano de la transformación es $r$." },
+  <div class="problem-card numeric-card" data-qid="p1_1" data-answer="c">
+    <span class="problem-type-tag">Práctica / Conversión</span>
+    <div class="problem-statement">8. Convierte una densidad de \( 13.6 \text{ g/cm}^3 \) a \( \text{kg/m}^3 \).</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="p1_1" id="p1_1a" value="a"><label for="p1_1a">\( 136 \text{ kg/m}^3 \)</label></li>
+      <li class="choice"><input type="radio" name="p1_1" id="p1_1b" value="b"><label for="p1_1b">\( 1360 \text{ kg/m}^3 \)</label></li>
+      <li class="choice"><input type="radio" name="p1_1" id="p1_1c" value="c"><label for="p1_1c">\( 13600 \text{ kg/m}^3 \)</label></li>
+      <li class="choice"><input type="radio" name="p1_1" id="p1_1d" value="d"><label for="p1_1d">\( 0.0136 \text{ kg/m}^3 \)</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('p1_1')">Verificar</button>
+    <div id="sol-p1_1" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: \( 13600 \text{ kg/m}^3 \)</span>
+      \[ 13.6 \frac{\text{g}}{\text{cm}^3} \times \left(\frac{1 \text{ kg}}{1000 \text{ g}}\right) \times \left(\frac{100 \text{ cm}}{1 \text{ m}}\right)^3 = 13600 \text{ kg/m}^3 \]
+    </div>
+  </div>
 
-            { question: "9. ¿Cuándo es más conveniente usar coordenadas polares?",
-              answers: { a: "Cuando la región $D$ es un rectángulo.", b: "Cuando el integrando contiene $\\sin(x)$.", c: "Cuando la región $D$ es circular o el integrando tiene $x^2+y^2$.", d: "Siempre." },
-              correctAnswer: "c", rationale: "Simplifica tanto los límites de integración (para círculos) como el integrando ($x^2+y^2=r^2$)." },
+  <div class="problem-card numeric-card" data-qid="p1_2" data-answer="b">
+    <span class="problem-type-tag">Práctica / Vectores</span>
+    <div class="problem-statement">9. Se tiene el vector \( \vec{r} = (3.0 \hat{i} - 4.0 \hat{j} + 12.0 \hat{k}) \text{ m} \). ¿Cuál es su magnitud?</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="p1_2" id="p1_2a" value="a"><label for="p1_2a">\( 11.0 \text{ m} \)</label></li>
+      <li class="choice"><input type="radio" name="p1_2" id="p1_2b" value="b"><label for="p1_2b">\( 13.0 \text{ m} \)</label></li>
+      <li class="choice"><input type="radio" name="p1_2" id="p1_2c" value="c"><label for="p1_2c">\( 19.0 \text{ m} \)</label></li>
+      <li class="choice"><input type="radio" name="p1_2" id="p1_2d" value="d"><label for="p1_2d">\( 169.0 \text{ m} \)</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('p1_2')">Verificar</button>
+    <div id="sol-p1_2" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: \( 13.0 \text{ m} \)</span>
+      \[ |\vec{r}| = \sqrt{3.0^2 + (-4.0)^2 + 12.0^2} = \sqrt{9 + 16 + 144} = \sqrt{169} = 13.0 \text{ m} \]
+    </div>
+  </div>
 
-            { question: "10. La integral de $x^2+y^2$ sobre el disco $x^2+y^2 \\le 9$ es:",
-              answers: { a: "$\\int_0^{2\\pi} \\int_0^3 r^2 \\,dr \\,d\\theta$", b: "$\\int_0^{2\\pi} \\int_0^9 r^3 \\,dr \\,d\\theta$", c: "$\\int_0^{2\\pi} \\int_0^3 r^3 \\,dr \\,d\\theta$", d: "$\\int_0^{\\pi} \\int_0^3 r^3 \\,dr \\,d\\theta$" },
-              correctAnswer: "c", rationale: "Integrando es $r^2$, multiplicado por Jacobiano $r$, queda $r^3$." },
+  <div class="problem-card numeric-card" data-qid="p1_3" data-answer="d">
+    <span class="problem-type-tag">Práctica / Álgebra Vectorial</span>
+    <div class="problem-statement">10. Dados los vectores \( \vec{A} = 2\hat{i} + 3\hat{j} \) y \( \vec{B} = -\hat{i} + 2\hat{j} \), halla \( \vec{A} \cdot \vec{B} \).</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="p1_3" id="p1_3a" value="a"><label for="p1_3a">\( 8 \)</label></li>
+      <li class="choice"><input type="radio" name="p1_3" id="p1_3b" value="b"><label for="p1_3b">\( -2\hat{i} + 6\hat{j} \)</label></li>
+      <li class="choice"><input type="radio" name="p1_3" id="p1_3c" value="c"><label for="p1_3c">\( -4 \)</label></li>
+      <li class="choice"><input type="radio" name="p1_3" id="p1_3d" value="d"><label for="p1_3d">\( 4 \)</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('p1_3')">Verificar</button>
+    <div id="sol-p1_3" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: \( 4 \)</span>
+      El producto escalar da un valor numérico escalar: \( (2)(-1) + (3)(2) = -2 + 6 = 4 \).
+    </div>
+  </div>
 
-            { question: "11. Evalúe $\\int_0^{\\pi/2} \\int_0^1 r \\,dr \\,d\\theta$.",
-              answers: { a: "$\\pi/4$", b: "$\\pi/2$", c: "$\\pi$", d: "$1/2$" },
-              correctAnswer: "a", rationale: "Int. $r$: $1/2$. Int. $\\theta$: $(1/2)(\\pi/2) = \\pi/4$." },
 
-            // --- BLOQUE 3: APLICACIONES ---
-            { question: "12. La masa $m$ de una lámina con densidad $\\rho(x,y)$ es:",
-              answers: { a: "$m = \\iint_D \\rho(x,y) \\,dA$", b: "$m = \\iint_D x \\rho \\,dA$", c: "$m = \\iint_D 1 \\,dA$", d: "Ninguna." },
-              correctAnswer: "a", rationale: "La masa es la integral de la densidad sobre el área." },
+  <h2 class="section-title">Tema 2: Movimiento en Línea Recta (Cinemática 1D)</h2>
 
-            { question: "13. Para el centro de masa $\\bar{y}$, necesitamos el momento $M_x$. ¿Su fórmula es?",
-              answers: { a: "$M_x = \\iint x \\rho \\,dA$", b: "$M_x = \\iint y \\rho \\,dA$", c: "$M_x = \\iint x^2 \\rho \\,dA$", d: "$M_x = \\iint (x+y) \\rho \\,dA$" },
-              correctAnswer: "b", rationale: "$M_x$ es el momento respecto al eje X, usa la distancia $y$." },
+  <div class="problem-card" data-qid="t2_1" data-answer="b">
+    <span class="problem-type-tag">Conceptos</span>
+    <div class="problem-statement">1. La derivada temporal de la función posición con respecto al tiempo, \( \frac{dx}{dt} \), representa:</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t2_1" id="t2_1a" value="a"><label for="t2_1a">La aceleración instantánea</label></li>
+      <li class="choice"><input type="radio" name="t2_1" id="t2_1b" value="b"><label for="t2_1b">La velocidad instantánea</label></li>
+      <li class="choice"><input type="radio" name="t2_1" id="t2_1c" value="c"><label for="t2_1c">La velocidad media</label></li>
+      <li class="choice"><input type="radio" name="t2_1" id="t2_1d" value="d"><label for="t2_1d">El desplazamiento total</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t2_1')">Verificar</button>
+    <div id="sol-t2_1" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: La velocidad instantánea</span>
+      El límite de la velocidad media conforme el intervalo de tiempo tiende a cero se define como la derivada matemática de la posición.
+    </div>
+  </div>
 
-            { question: "14. El momento de inercia $I_x$ usa el término:",
-              answers: { a: "$y$", b: "$x$", c: "$y^2$", d: "$x^2$" },
-              correctAnswer: "c", rationale: "Inercia implica el cuadrado de la distancia al eje." },
+  <div class="problem-card" data-qid="t2_2" data-answer="a">
+    <span class="problem-type-tag">Gráficas</span>
+    <div class="problem-statement">2. ¿Qué significado geométrico tiene el área bajo la curva en una gráfica de velocidad vs. tiempo?</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t2_2" id="t2_2a" value="a"><label for="t2_2a">El desplazamiento de la partícula.</label></li>
+      <li class="choice"><input type="radio" name="t2_2" id="t2_2b" value="b"><label for="t2_2b">La aceleración de la partícula.</label></li>
+      <li class="choice"><input type="radio" name="t2_2" id="t2_2c" value="c"><label for="t2_2c">El cambio en aceleración.</label></li>
+      <li class="choice"><input type="radio" name="t2_2" id="t2_2d" value="d"><label for="t2_2d">La posición inicial del objeto.</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t2_2')">Verificar</button>
+    <div id="sol-t2_2" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: El desplazamiento de la partícula.</span>
+      
 
-            // --- BLOQUE 4: TRIPLES CARTESIANAS ---
-            { question: "15. ¿Qué representa $\\iiint_E 1 \\,dV$?",
-              answers: { a: "Masa.", b: "Volumen de $E$.", c: "Área superficial.", d: "Densidad." },
-              correctAnswer: "b", rationale: "La integral triple de la función 1 es el volumen geométrico." },
+[Image of area under velocity-time graph]
 
-            { question: "16. Evalúe $\\int_0^1 \\int_0^1 \\int_0^1 x \\,dx \\,dy \\,dz$.",
-              answers: { a: "$1/2$", b: "$1$", c: "$3/2$", d: "$1/6$" },
-              correctAnswer: "a", rationale: "$\\int x dx = 1/2$. Las otras integrales son de 1 sobre [0,1], no cambian el valor." },
+      La integral de la velocidad respecto al tiempo (el área neta bajo la curva) es igual al cambio neto de la posición (\( \Delta x \)).
+    </div>
+  </div>
 
-            { question: "17. Evalúe $\\int_0^1 \\int_0^x \\int_0^y 6 \\,dz \\,dy \\,dx$.",
-              answers: { a: "$6$", b: "$3$", c: "$1$", d: "$1/3$" },
-              correctAnswer: "c", rationale: "$6z|_0^y = 6y \\to 3y^2|_0^x = 3x^2 \\to x^3|_0^1 = 1$." },
+  <div class="problem-card" data-qid="t2_3" data-answer="c">
+    <span class="problem-type-tag">Conceptos</span>
+    <div class="problem-statement">3. Si la velocidad de un auto es negativa y su aceleración es negativa, el auto está:</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t2_3" id="t2_3a" value="a"><label for="t2_3a">Frenando gradualmente.</label></li>
+      <li class="choice"><input type="radio" name="t2_3" id="t2_3b" value="b"><label for="t2_3b">Moviéndose a velocidad constante.</label></li>
+      <li class="choice"><input type="radio" name="t2_3" id="t2_3c" value="c"><label for="t2_3c">Aumentando su rapidez (acelerando).</label></li>
+      <li class="choice"><input type="radio" name="t2_3" id="t2_3d" value="d"><label for="t2_3d">Cambiando de dirección temporalmente.</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t2_3')">Verificar</button>
+    <div id="sol-t2_3" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: Aumentando su rapidez.</span>
+      Si la velocidad y la aceleración tienen el mismo signo, ambas operan en la misma dirección, por lo que la magnitud de la velocidad (la rapidez) incrementa.
+    </div>
+  </div>
 
-            { question: "18. Volumen en el primer octante bajo $x+y+z=1$.",
-              answers: { a: "$\\int_0^1 \\int_0^{1-x} \\int_0^{1-x-y} 1 \\,dz \\,dy \\,dx$", b: "$\\int_0^1 \\int_0^1 \\int_0^1 1 \\,dz \\,dy \\,dx$", c: "Cubo unitario", d: "$\\int_0^1 \\int_0^x \\int_0^y 1 dz dy dx$" },
-              correctAnswer: "a", rationale: "Límites: $z$ va de 0 al plano. $y$ va de 0 a la recta $1-x$. $x$ va de 0 a 1." },
+  <div class="problem-card" data-qid="t2_4" data-answer="d">
+    <span class="problem-type-tag">Caída Libre</span>
+    <div class="problem-statement">4. En un lanzamiento vertical hacia arriba, en el punto de altura máxima, ¿cuál es la aceleración de la partícula? (Desprecia el aire).</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t2_4" id="t2_4a" value="a"><label for="t2_4a">Cero, momentáneamente.</label></li>
+      <li class="choice"><input type="radio" name="t2_4" id="t2_4b" value="b"><label for="t2_4b">\( 9.8 \text{ m/s}^2 \) dirigida hacia arriba.</label></li>
+      <li class="choice"><input type="radio" name="t2_4" id="t2_4c" value="c"><label for="t2_4c">Proporcional a la masa del objeto.</label></li>
+      <li class="choice"><input type="radio" name="t2_4" id="t2_4d" value="d"><label for="t2_4d">\( g \) dirigida hacia abajo (aprox. \( 9.8 \text{ m/s}^2 \)).</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t2_4')">Verificar</button>
+    <div id="sol-t2_4" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: \( g \) dirigida hacia abajo.</span>
+      Aunque la velocidad es cero en el punto más alto, la fuerza de gravedad continúa actuando; la aceleración en todo el trayecto de caída libre es siempre constante e igual a \( -g \).
+    </div>
+  </div>
 
-            // --- BLOQUE 5: CILÍNDRICAS ---
-            { question: "19. $dV$ en cilíndricas es:",
-              answers: { a: "$dr d\\theta dz$", b: "$r dr d\\theta dz$", c: "$\\rho^2 \\sin\\phi d\\rho d\\phi d\\theta$", d: "$r^2 dr d\\theta dz$" },
-              correctAnswer: "b", rationale: "Es polares ($r dr d\\theta$) más la altura $dz$." },
+  <div class="problem-card" data-qid="t2_5" data-answer="b">
+    <span class="problem-type-tag">Ecuaciones</span>
+    <div class="problem-statement">5. La ecuación \( x = x_0 + v_0 t + \frac{1}{2} a t^2 \) es válida únicamente cuando:</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t2_5" id="t2_5a" value="a"><label for="t2_5a">La aceleración cambia linealmente con el tiempo.</label></li>
+      <li class="choice"><input type="radio" name="t2_5" id="t2_5b" value="b"><label for="t2_5b">La aceleración de la partícula es constante.</label></li>
+      <li class="choice"><input type="radio" name="t2_5" id="t2_5c" value="c"><label for="t2_5c">El objeto se mueve con velocidad constante.</label></li>
+      <li class="choice"><input type="radio" name="t2_5" id="t2_5d" value="d"><label for="t2_5d">El desplazamiento inicial es cero.</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t2_5')">Verificar</button>
+    <div id="sol-t2_5" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: La aceleración de la partícula es constante.</span>
+      Todas las ecuaciones de la cinemática estándar presentadas en este formato se derivan asumiendo una aceleración constante.
+    </div>
+  </div>
 
-            { question: "20. La superficie $r=5$ es:",
-              answers: { a: "Esfera.", b: "Cono.", c: "Cilindro circular.", d: "Plano." },
-              correctAnswer: "c", rationale: "$x^2+y^2=25$ extendido en Z es un cilindro." },
+  <div class="problem-card" data-qid="t2_6" data-answer="c">
+    <span class="problem-type-tag">Gráficas</span>
+    <div class="problem-statement">6. La pendiente de una gráfica de posición vs. tiempo en un instante determinado \( t \), representa:</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t2_6" id="t2_6a" value="a"><label for="t2_6a">La aceleración instantánea en \( t \).</label></li>
+      <li class="choice"><input type="radio" name="t2_6" id="t2_6b" value="b"><label for="t2_6b">El cambio de posición a partir de \( t = 0 \).</label></li>
+      <li class="choice"><input type="radio" name="t2_6" id="t2_6c" value="c"><label for="t2_6c">La velocidad instantánea en \( t \).</label></li>
+      <li class="choice"><input type="radio" name="t2_6" id="t2_6d" value="d"><label for="t2_6d">La velocidad promedio a lo largo de toda la trayectoria.</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t2_6')">Verificar</button>
+    <div id="sol-t2_6" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: La velocidad instantánea.</span>
+      La pendiente de la línea tangente a la gráfica \( x(t) \) es la derivada geométrica \( dx/dt \).
+    </div>
+  </div>
 
-            { question: "21. Volumen entre paraboloide $z=x^2+y^2$ y plano $z=4$.",
-              answers: { a: "$\\int \\int \\int r dz dr d\\theta$", b: "$\\int_0^{2\\pi} \\int_0^2 \\int_{r^2}^4 r \\,dz \\,dr \\,d\\theta$", c: "$\\int \\int \\int dz dr d\\theta$", d: "Incorrecto." },
-              correctAnswer: "b", rationale: "El piso es el paraboloide ($z=r^2$) y el techo el plano ($z=4$). Intersección en $r=2$." },
+  <div class="problem-card" data-qid="t2_7" data-answer="a">
+    <span class="problem-type-tag">Conceptos</span>
+    <div class="problem-statement">7. Una partícula en movimiento rectilíneo en un tiempo \( t_1 \) tiene rapidez \( v_1 \). Si retrocede por la misma ruta volviendo al origen, su desplazamiento total es:</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t2_7" id="t2_7a" value="a"><label for="t2_7a">Cero.</label></li>
+      <li class="choice"><input type="radio" name="t2_7" id="t2_7b" value="b"><label for="t2_7b">Doble de la distancia alcanzada.</label></li>
+      <li class="choice"><input type="radio" name="t2_7" id="t2_7c" value="c"><label for="t2_7c">Dependiente de su aceleración en la vuelta.</label></li>
+      <li class="choice"><input type="radio" name="t2_7" id="t2_7d" value="d"><label for="t2_7d">Menor que cero.</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t2_7')">Verificar</button>
+    <div id="sol-t2_7" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: Cero.</span>
+      El desplazamiento es un vector que mide solo la diferencia entre posición final e inicial. Si la partícula vuelve al inicio, \( \Delta x = 0 \).
+    </div>
+  </div>
 
-            { question: "22. Resultado de la integral anterior.",
-              answers: { a: "$8\\pi$", b: "$16\\pi$", c: "$4\\pi/3$", d: "$8\\pi/3$" },
-              correctAnswer: "a", rationale: "Calculado paso a paso da $8\\pi$." },
+  <div class="problem-card numeric-card" data-qid="p2_1" data-answer="d">
+    <span class="problem-type-tag">Práctica / MRUV</span>
+    <div class="problem-statement">8. Un tren bala reduce su velocidad uniformemente desde \( 60 \text{ m/s} \) a \( 20 \text{ m/s} \) recorriendo una distancia de \( 800 \text{ m} \). ¿Cuál es su aceleración?</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="p2_1" id="p2_1a" value="a"><label for="p2_1a">\( -1.0 \text{ m/s}^2 \)</label></li>
+      <li class="choice"><input type="radio" name="p2_1" id="p2_1b" value="b"><label for="p2_1b">\( 2.0 \text{ m/s}^2 \)</label></li>
+      <li class="choice"><input type="radio" name="p2_1" id="p2_1c" value="c"><label for="p2_1c">\( -4.0 \text{ m/s}^2 \)</label></li>
+      <li class="choice"><input type="radio" name="p2_1" id="p2_1d" value="d"><label for="p2_1d">\( -2.0 \text{ m/s}^2 \)</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('p2_1')">Verificar</button>
+    <div id="sol-p2_1" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: \( -2.0 \text{ m/s}^2 \)</span>
+      Utiliza \( v^2 = v_0^2 + 2a\Delta x \Rightarrow 20^2 = 60^2 + 2a(800) \Rightarrow 400 - 3600 = 1600a \Rightarrow a = -3200/1600 = -2.0 \text{ m/s}^2 \).
+    </div>
+  </div>
 
-            // --- BLOQUE 6: ESFÉRICAS ---
-            { question: "23. $dV$ en esféricas es:",
-              answers: { a: "$d\\rho d\\phi d\\theta$", b: "$\\rho d\\rho d\\phi d\\theta$", c: "$r dr d\\theta dz$", d: "$\\rho^2 \\sin\\phi \\,d\\rho \\,d\\phi \\,d\\theta$" },
-              correctAnswer: "d", rationale: "Jacobiano estándar para esféricas." },
+  <div class="problem-card numeric-card" data-qid="p2_2" data-answer="c">
+    <span class="problem-type-tag">Práctica / Derivación</span>
+    <div class="problem-statement">9. La posición de un auto está dada por \( x(t) = 4t^3 - 2t + 5 \) (metros). Calcula su velocidad instantánea en el tiempo \( t = 2 \text{ s} \).</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="p2_2" id="p2_2a" value="a"><label for="p2_2a">\( 33 \text{ m/s} \)</label></li>
+      <li class="choice"><input type="radio" name="p2_2" id="p2_2b" value="b"><label for="p2_2b">\( 48 \text{ m/s} \)</label></li>
+      <li class="choice"><input type="radio" name="p2_2" id="p2_2c" value="c"><label for="p2_2c">\( 46 \text{ m/s} \)</label></li>
+      <li class="choice"><input type="radio" name="p2_2" id="p2_2d" value="d"><label for="p2_2d">\( 24 \text{ m/s} \)</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('p2_2')">Verificar</button>
+    <div id="sol-p2_2" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: \( 46 \text{ m/s} \)</span>
+      \( v(t) = \frac{dx}{dt} = 12t^2 - 2 \). Evaluando en \( t=2 \), \( v(2) = 12(2^2) - 2 = 12(4) - 2 = 48 - 2 = 46 \text{ m/s} \).
+    </div>
+  </div>
 
-            { question: "24. La superficie $\\phi = \\pi/2$ es:",
-              answers: { a: "Eje Z.", b: "Plano XY.", c: "Cono.", d: "Esfera." },
-              correctAnswer: "b", rationale: "Ángulo de 90 grados desde el polo norte cae en el ecuador (plano XY)." },
+  <div class="problem-card numeric-card" data-qid="p2_3" data-answer="b">
+    <span class="problem-type-tag">Práctica / Caída Libre</span>
+    <div class="problem-statement">10. Se suelta un balín de acero desde el reposo. ¿Qué distancia cae verticalmente tras \( 3.0 \text{ s} \)? (Desprecia fricción con el aire).</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="p2_3" id="p2_3a" value="a"><label for="p2_3a">\( 29.4 \text{ m} \)</label></li>
+      <li class="choice"><input type="radio" name="p2_3" id="p2_3b" value="b"><label for="p2_3b">\( 44.1 \text{ m} \)</label></li>
+      <li class="choice"><input type="radio" name="p2_3" id="p2_3c" value="c"><label for="p2_3c">\( 14.7 \text{ m} \)</label></li>
+      <li class="choice"><input type="radio" name="p2_3" id="p2_3d" value="d"><label for="p2_3d">\( 88.2 \text{ m} \)</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('p2_3')">Verificar</button>
+    <div id="sol-p2_3" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: \( 44.1 \text{ m} \)</span>
+      La distancia caída es \( y = \frac{1}{2}gt^2 = \frac{1}{2}(9.8)(3.0)^2 = 4.9(9) = 44.1 \text{ m} \).
+    </div>
+  </div>
 
-            { question: "25. Volumen de esfera radio 2:",
-              answers: { a: "$\\int_0^{2\\pi} \\int_0^{\\pi} \\int_0^2 \\rho^2 \\sin\\phi \\,d\\rho \\,d\\phi \\,d\\theta$", b: "$\\int_0^{2\\pi} \\int_0^{\\pi} \\int_0^4 1 dV$", c: "$\\int_0^{2\\pi} \\int_0^{\\pi/2} ...$", d: "..." },
-              correctAnswer: "a", rationale: "Radio $\\rho$ de 0 a 2. $\\phi$ barre toda la esfera (0 a $\\pi$)." },
 
-            // --- BLOQUE 7: CAMPOS VECTORIALES E INT. DE LÍNEA (NUEVO) ---
-            { question: "26. (Stewart 16.1) ¿Cómo se llama un campo vectorial $\\mathbf{F}$ tal que $\\mathbf{F} = \\nabla f$ para alguna función escalar $f$?",
-              answers: { a: "Campo Rotacional.", b: "Campo Conservativo.", c: "Campo Solenoidal.", d: "Campo Divergente." },
-              correctAnswer: "b", rationale: "Si el campo es el gradiente de una función potencial $f$, se denomina campo vectorial conservativo." },
+  <h2 class="section-title">Tema 3: Movimiento en 2D y 3D (Proyectiles, MCU, Relativa)</h2>
 
-            { question: "27. (Stewart 16.2) ¿Cómo se evalúa la integral de línea $\\int_C \\mathbf{F} \\cdot d\\mathbf{r}$ si la curva $C$ está parametrizada por $\\mathbf{r}(t)$ para $a \\le t \\le b$?",
-              answers: { a: "$\\int_a^b \\mathbf{F}(\\mathbf{r}(t)) \\cdot \\mathbf{r}'(t) \\,dt$", b: "$\\int_a^b \\mathbf{F}(\\mathbf{r}(t)) \\cdot \\mathbf{r}(t) \\,dt$", c: "$\\int_a^b |\\mathbf{F}(\\mathbf{r}(t))| \\,dt$", d: "$\\int_a^b \\mathbf{F}(t) \\cdot \\mathbf{r}'(t) \\,dt$" },
-              correctAnswer: "a", rationale: "Es la definición estándar: producto punto entre el campo evaluado en la curva y el vector tangente (derivada)." },
+  <div class="problem-card" data-qid="t3_1" data-answer="a">
+    <span class="problem-type-tag">Proyectiles</span>
+    <div class="problem-statement">1. El principio de independencia de movimientos en cinemática 2D establece que, para un proyectil:</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t3_1" id="t3_1a" value="a"><label for="t3_1a">El movimiento horizontal y vertical se pueden analizar por separado sin afectarse mutuamente.</label></li>
+      <li class="choice"><input type="radio" name="t3_1" id="t3_1b" value="b"><label for="t3_1b">El tiempo de vuelo depende de la velocidad inicial horizontal.</label></li>
+      <li class="choice"><input type="radio" name="t3_1" id="t3_1c" value="c"><label for="t3_1c">La masa del proyectil altera significativamente el análisis.</label></li>
+      <li class="choice"><input type="radio" name="t3_1" id="t3_1d" value="d"><label for="t3_1d">La aceleración cambia en los distintos ejes en función de la velocidad.</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t3_1')">Verificar</button>
+    <div id="sol-t3_1" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: El movimiento horizontal y vertical se analizan por separado.</span>
+      Las ecuaciones para "x" e "y" están ligadas únicamente por el parámetro de tiempo.
+    </div>
+  </div>
 
-            { question: "28. (Stewart 16.2) Si $\\mathbf{F}$ representa un campo de fuerza, ¿qué representa físicamente la integral de línea $\\int_C \\mathbf{F} \\cdot d\\mathbf{r}$?",
-              answers: { a: "La masa del alambre.", b: "El flujo a través del alambre.", c: "El trabajo realizado por la fuerza al mover una partícula a lo largo de $C$.", d: "La longitud de la curva $C$." },
-              correctAnswer: "c", rationale: "La integral de línea de un campo tangencial representa el trabajo (Work)." },
+  <div class="problem-card" data-qid="t3_2" data-answer="d">
+    <span class="problem-type-tag">Proyectiles</span>
+    <div class="problem-statement">2. Para un proyectil en vuelo libre (lanzado con cierto ángulo \(\theta_0\)), su vector velocidad en cualquier instante es siempre:</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t3_2" id="t3_2a" value="a"><label for="t3_2a">Paralelo a la aceleración de la gravedad.</label></li>
+      <li class="choice"><input type="radio" name="t3_2" id="t3_2b" value="b"><label for="t3_2b">Constante durante el vuelo completo.</label></li>
+      <li class="choice"><input type="radio" name="t3_2" id="t3_2c" value="c"><label for="t3_2c">Perpendicular al vector aceleración en todo momento.</label></li>
+      <li class="choice"><input type="radio" name="t3_2" id="t3_2d" value="d"><label for="t3_2d">Tangente a la trayectoria que describe.</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t3_2')">Verificar</button>
+    <div id="sol-t3_2" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: Tangente a la trayectoria.</span>
+      El vector velocidad instantánea indica la dirección del movimiento en todo punto, por lo tanto, es geométricamente tangente a la curva parabólica.
+    </div>
+  </div>
 
-            { question: "29. (Stewart 16.3) Según el Teorema Fundamental de las Integrales de Línea, si $\\mathbf{F} = \\nabla f$ y $C$ es una curva suave desde $A$ hasta $B$, entonces $\\int_C \\mathbf{F} \\cdot d\\mathbf{r}$ es igual a:",
-              answers: { a: "$f(B) - f(A)$", b: "$f(A) - f(B)$", c: "$f(B) + f(A)$", d: "0" },
-              correctAnswer: "a", rationale: "Es análogo al Teorema Fundamental del Cálculo: la integral del gradiente es la diferencia de potencial en los extremos." },
+  <div class="problem-card" data-qid="t3_3" data-answer="c">
+    <span class="problem-type-tag">Proyectiles</span>
+    <div class="problem-statement">3. En el punto más alto del lanzamiento de un proyectil en trayectoria parabólica, es cierto que:</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t3_3" id="t3_3a" value="a"><label for="t3_3a">Tanto su velocidad como su aceleración son vectores nulos (cero).</label></li>
+      <li class="choice"><input type="radio" name="t3_3" id="t3_3b" value="b"><label for="t3_3b">Su velocidad es máxima pero dirigida horizontalmente.</label></li>
+      <li class="choice"><input type="radio" name="t3_3" id="t3_3c" value="c"><label for="t3_3c">Su velocidad es mínima y perpendicular al vector aceleración.</label></li>
+      <li class="choice"><input type="radio" name="t3_3" id="t3_3d" value="d"><label for="t3_3d">Su aceleración es nula y su velocidad apunta hacia abajo.</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t3_3')">Verificar</button>
+    <div id="sol-t3_3" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: Su velocidad es mínima y perpendicular al vector aceleración.</span>
+      
+      En el vértice de la parábola, \(v_y = 0\), por lo que \(\vec{v}\) tiene solo componente horizontal (es paralela al eje X). Como \(\vec{a} = \vec{g}\) (vertical hacia abajo), forman \(90^\circ\).
+    </div>
+  </div>
 
-            { question: "30. (Stewart 16.3) ¿Qué implica que una integral de línea sea 'independiente de la trayectoria' en una región abierta y conexa?",
-              answers: { a: "Que la integral siempre da cero.", b: "Que el campo $\\mathbf{F}$ es conservativo ($\nabla f = \\mathbf{F}$).", c: "Que la curva $C$ debe ser una línea recta.", d: "Que $\\text{div } \\mathbf{F} = 0$." },
-              correctAnswer: "b", rationale: "La independencia de la trayectoria es equivalente a decir que el campo es conservativo." },
+  <div class="problem-card" data-qid="t3_4" data-answer="b">
+    <span class="problem-type-tag">Movimiento Circular Uniforme</span>
+    <div class="problem-statement">4. En el Movimiento Circular Uniforme (MCU), la magnitud del vector aceleración y velocidad:</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t3_4" id="t3_4a" value="a"><label for="t3_4a">Cambian ambas constantemente.</label></li>
+      <li class="choice"><input type="radio" name="t3_4" id="t3_4b" value="b"><label for="t3_4b">Se mantienen constantes, pero su dirección cambia.</label></li>
+      <li class="choice"><input type="radio" name="t3_4" id="t3_4c" value="c"><label for="t3_4c">La velocidad disminuye paulatinamente.</label></li>
+      <li class="choice"><input type="radio" name="t3_4" id="t3_4d" value="d"><label for="t3_4d">Aumentan en función del radio del círculo.</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t3_4')">Verificar</button>
+    <div id="sol-t3_4" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: Se mantienen constantes, pero su dirección cambia.</span>
+      El término "Uniforme" refiere a la rapidez (magnitud de v constante), lo que hace que \(a_c = v^2/R\) también tenga magnitud constante. Sin embargo, ambos vectores rotan sus direcciones constantemente.
+    </div>
+  </div>
 
-            { question: "31. (Stewart 16.3) ¿Cuál es la condición necesaria para que un campo $\\mathbf{F}(x,y) = P\\mathbf{i} + Q\\mathbf{j}$ sea conservativo en todo el plano?",
-              answers: { a: "$\\frac{\\partial P}{\\partial x} = \\frac{\\partial Q}{\\partial y}$", b: "$\\frac{\\partial P}{\\partial y} = \\frac{\\partial Q}{\\partial x}$", c: "$\\frac{\\partial P}{\\partial x} + \\frac{\\partial Q}{\\partial y} = 0$", d: "$P^2 + Q^2 = 1$" },
-              correctAnswer: "b", rationale: "Esta condición (que el rotacional sea cero en 2D) es necesaria y suficiente en regiones simplemente conexas." },
+  <div class="problem-card" data-qid="t3_5" data-answer="a">
+    <span class="problem-type-tag">Movimiento Circular No Uniforme</span>
+    <div class="problem-statement">5. Si una partícula en trayectoria circular está incrementando su rapidez, el vector aceleración neta de la partícula:</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t3_5" id="t3_5a" value="a"><label for="t3_5a">Tiene una componente radial hacia adentro y una componente tangencial.</label></li>
+      <li class="choice"><input type="radio" name="t3_5" id="t3_5b" value="b"><label for="t3_5b">Apunta estrictamente hacia el centro de la trayectoria.</label></li>
+      <li class="choice"><input type="radio" name="t3_5" id="t3_5c" value="c"><label for="t3_5c">Apunta tangencialmente hacia atrás (dirección opuesta al movimiento).</label></li>
+      <li class="choice"><input type="radio" name="t3_5" id="t3_5d" value="d"><label for="t3_5d">Es puramente perpendicular al vector velocidad.</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t3_5')">Verificar</button>
+    <div id="sol-t3_5" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: Tiene una componente radial y una tangencial.</span>
+      
+      La componente radial (\(a_{rad}\)) es responsable de que gire y la componente tangencial (\(a_{tan}\)) es la responsable de alterar la magnitud de la velocidad (rapidez).
+    </div>
+  </div>
 
-            // --- BLOQUE 8: TEOREMA DE GREEN (NUEVO) ---
-            { question: "32. (Stewart 16.4) El Teorema de Green relaciona una integral de línea sobre una curva cerrada $C$ con:",
-              answers: { a: "Una integral triple sobre un volumen.", b: "Una integral doble sobre la región plana $D$ acotada por $C$.", c: "Otra integral de línea sobre una curva diferente.", d: "El gradiente de una función." },
-              correctAnswer: "b", rationale: "Green conecta la integral de borde (circulación) con la integral de área (rotacional microscópico)." },
+  <div class="problem-card" data-qid="t3_6" data-answer="c">
+    <span class="problem-type-tag">Conceptos</span>
+    <div class="problem-statement">6. Sin considerar la resistencia del aire, ¿con qué ángulo de lanzamiento se logra el alcance máximo para un nivel de terreno plano?</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t3_6" id="t3_6a" value="a"><label for="t3_6a">30°</label></li>
+      <li class="choice"><input type="radio" name="t3_6" id="t3_6b" value="b"><label for="t3_6b">60°</label></li>
+      <li class="choice"><input type="radio" name="t3_6" id="t3_6c" value="c"><label for="t3_6c">45°</label></li>
+      <li class="choice"><input type="radio" name="t3_6" id="t3_6d" value="d"><label for="t3_6d">90°</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t3_6')">Verificar</button>
+    <div id="sol-t3_6" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: 45°</span>
+      En la fórmula de alcance \(R = \frac{v_0^2 \sin(2\theta)}{g}\), el valor de la función seno es máximo (igual a 1) cuando el argumento \(2\theta = 90^\circ\), lo que resulta en \(\theta = 45^\circ\).
+    </div>
+  </div>
 
-            { question: "33. (Stewart 16.4) ¿Cuál es la fórmula correcta del Teorema de Green para $\\oint_C P dx + Q dy$ con orientación positiva?",
-              answers: { a: "$\\iint_D (\\frac{\\partial Q}{\\partial x} - \\frac{\\partial P}{\\partial y}) \\,dA$", b: "$\\iint_D (\\frac{\\partial P}{\\partial x} + \\frac{\\partial Q}{\\partial y}) \\,dA$", c: "$\\iint_D (\\frac{\\partial P}{\\partial y} - \\frac{\\partial Q}{\\partial x}) \\,dA$", d: "$\\iint_D (Q - P) \\,dA$" },
-              correctAnswer: "a", rationale: "Es la integral del componente $k$ del rotacional: $\\frac{\\partial Q}{\\partial x} - \\frac{\\partial P}{\\partial y}$." },
+  <div class="problem-card" data-qid="t3_7" data-answer="b">
+    <span class="problem-type-tag">Velocidad Relativa</span>
+    <div class="problem-statement">7. La regla de adición de marcos de referencia (velocidad relativa) en cinemática clásica puede describirse matemáticamente por la ecuación vectorial:</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="t3_7" id="t3_7a" value="a"><label for="t3_7a">\( \vec{v}_{P/A} = \vec{v}_{P/B} \times \vec{v}_{B/A} \)</label></li>
+      <li class="choice"><input type="radio" name="t3_7" id="t3_7b" value="b"><label for="t3_7b">\( \vec{v}_{P/A} = \vec{v}_{P/B} + \vec{v}_{B/A} \)</label></li>
+      <li class="choice"><input type="radio" name="t3_7" id="t3_7c" value="c"><label for="t3_7c">\( \vec{v}_{P/A} = \frac{\vec{v}_{P/B}}{\vec{v}_{B/A}} \)</label></li>
+      <li class="choice"><input type="radio" name="t3_7" id="t3_7d" value="d"><label for="t3_7d">\( \vec{v}_{P/A} = \vec{v}_{B/A} - \vec{v}_{P/B} \)</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('t3_7')">Verificar</button>
+    <div id="sol-t3_7" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: \( \vec{v}_{P/A} = \vec{v}_{P/B} + \vec{v}_{B/A} \)</span>
+      La velocidad de un cuerpo (P) respecto al observador inercial (A) es igual a la suma vectorial de la velocidad de P respecto al marco móvil (B) más la velocidad del marco B respecto al marco A.
+    </div>
+  </div>
 
-            { question: "34. (Stewart 16.4) Si $C$ es la frontera de un cuadrado unitario orientada positivamente y $\\mathbf{F} = \\langle -y, x \\rangle$, use Green para evaluar $\\oint_C x dy - y dx$.",
-              answers: { a: "0", b: "1", c: "2", d: "4" },
-              correctAnswer: "c", rationale: "Aquí $P=-y, Q=x$. Green: $\\iint (\\frac{\\partial (x)}{\\partial x} - \\frac{\\partial (-y)}{\\partial y}) dA = \\iint (1 - (-1)) dA = \\iint 2 dA = 2 \\times \\text{Área}(1) = 2$." },
+  <div class="problem-card numeric-card" data-qid="p3_1" data-answer="c">
+    <span class="problem-type-tag">Práctica / Proyectiles</span>
+    <div class="problem-statement">8. Una flecha es disparada a nivel de suelo con \( 40 \text{ m/s} \) formando \( 30^\circ \) con la horizontal. ¿Cuánto tiempo dura en el aire hasta impactar suelo otra vez?</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="p3_1" id="p3_1a" value="a"><label for="p3_1a">\( \approx 2.04 \text{ s} \)</label></li>
+      <li class="choice"><input type="radio" name="p3_1" id="p3_1b" value="b"><label for="p3_1b">\( \approx 8.16 \text{ s} \)</label></li>
+      <li class="choice"><input type="radio" name="p3_1" id="p3_1c" value="c"><label for="p3_1c">\( \approx 4.08 \text{ s} \)</label></li>
+      <li class="choice"><input type="radio" name="p3_1" id="p3_1d" value="d"><label for="p3_1d">\( \approx 10.0 \text{ s} \)</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('p3_1')">Verificar</button>
+    <div id="sol-p3_1" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: \( \approx 4.08 \text{ s} \)</span>
+      El tiempo total (nivel a nivel) es \( T = \frac{2v_0 \sin\theta}{g} = \frac{2(40) \sin 30^\circ}{9.8} = \frac{80(0.5)}{9.8} = \frac{40}{9.8} \approx 4.08 \text{ s} \).
+    </div>
+  </div>
 
-            { question: "35. (Stewart 16.4) Para aplicar el Teorema de Green, la orientación de la curva frontera $C$ debe ser:",
-              answers: { a: "En el sentido de las manecillas del reloj.", b: "Positiva (contra las manecillas del reloj), dejando la región a la izquierda.", c: "Aleatoria.", d: "Perpendicular al plano." },
-              correctAnswer: "b", rationale: "La orientación positiva convencional es antihoraria (counter-clockwise), manteniendo la región interior a la izquierda del caminante." }
-        ];
+  <div class="problem-card numeric-card" data-qid="p3_2" data-answer="d">
+    <span class="problem-type-tag">Práctica / Circular Uniforme</span>
+    <div class="problem-statement">9. Un volante de motor gira uniformemente con un radio de \( 0.2 \text{ m} \). Si el borde de la rueda tiene una rapidez constante de \( 10 \text{ m/s} \), calcula la aceleración centrípeta en el borde.</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="p3_2" id="p3_2a" value="a"><label for="p3_2a">\( 50 \text{ m/s}^2 \)</label></li>
+      <li class="choice"><input type="radio" name="p3_2" id="p3_2b" value="b"><label for="p3_2b">\( 100 \text{ m/s}^2 \)</label></li>
+      <li class="choice"><input type="radio" name="p3_2" id="p3_2c" value="c"><label for="p3_2c">\( 2 \text{ m/s}^2 \)</label></li>
+      <li class="choice"><input type="radio" name="p3_2" id="p3_2d" value="d"><label for="p3_2d">\( 500 \text{ m/s}^2 \)</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('p3_2')">Verificar</button>
+    <div id="sol-p3_2" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: \( 500 \text{ m/s}^2 \)</span>
+      Usamos la ecuación \( a_c = \frac{v^2}{R} \). Sustituyendo: \( a_c = \frac{(10)^2}{0.2} = \frac{100}{0.2} = 500 \text{ m/s}^2 \).
+    </div>
+  </div>
 
-        // --- LÓGICA DEL QUIZ ---
-        const quizForm = document.getElementById('quiz-form');
-        const resultsContainer = document.getElementById('results-container');
+  <div class="problem-card numeric-card" data-qid="p3_3" data-answer="b">
+    <span class="problem-type-tag">Práctica / Velocidad Relativa</span>
+    <div class="problem-statement">10. Un nadador desea cruzar un río nadando perpendicularmente hacia la orilla opuesta a \( 1.5 \text{ m/s} \) respecto al agua. Si la corriente del río es de \( 2.0 \text{ m/s} \), ¿con qué rapidez lo vería moverse una persona de pie en la orilla?</div>
+    <ul class="choices">
+      <li class="choice"><input type="radio" name="p3_3" id="p3_3a" value="a"><label for="p3_3a">\( 3.5 \text{ m/s} \)</label></li>
+      <li class="choice"><input type="radio" name="p3_3" id="p3_3b" value="b"><label for="p3_3b">\( 2.5 \text{ m/s} \)</label></li>
+      <li class="choice"><input type="radio" name="p3_3" id="p3_3c" value="c"><label for="p3_3c">\( 0.5 \text{ m/s} \)</label></li>
+      <li class="choice"><input type="radio" name="p3_3" id="p3_3d" value="d"><label for="p3_3d">\( 4.25 \text{ m/s} \)</label></li>
+    </ul>
+    <button class="btn" onclick="checkMCQ('p3_3')">Verificar</button>
+    <div id="sol-p3_3" class="solution-area">
+      <span class="explanation-title">Respuesta correcta: \( 2.5 \text{ m/s} \)</span>
+      Los vectores son ortogonales, así que aplicamos el teorema de Pitágoras para sumar vectores perpendiculares: \( v_{n/tierra} = \sqrt{v_{n/agua}^2 + v_{agua/tierra}^2} = \sqrt{1.5^2 + 2.0^2} = \sqrt{2.25 + 4.0} = \sqrt{6.25} = 2.5 \text{ m/s} \).
+    </div>
+  </div>
 
-        function buildQuiz() {
-            const output = [];
-            let currentSection = "";
 
-            quizData.forEach((currentQuestion, questionIndex) => {
-                // Detectar cambio de tema para insertar cabeceras visuales
-                let sectionTitle = "";
-                if (questionIndex === 0) sectionTitle = "Integrales Dobles (Cartesianas)";
-                else if (questionIndex === 7) sectionTitle = "Integrales Dobles (Polares)";
-                else if (questionIndex === 11) sectionTitle = "Aplicaciones Físicas";
-                else if (questionIndex === 14) sectionTitle = "Integrales Triples (Cartesianas)";
-                else if (questionIndex === 18) sectionTitle = "Cilíndricas";
-                else if (questionIndex === 22) sectionTitle = "Esféricas";
-                else if (questionIndex === 25) sectionTitle = "Campos Vectoriales e Integrales de Línea";
-                else if (questionIndex === 31) sectionTitle = "Teorema de Green";
+  <footer>
+    <p>Notas y material interactivo creado para el curso de Mecánica (CUCEI).</p>
+  </footer>
+</div>
 
-                if (sectionTitle) {
-                    output.push(`<div class="section-header">${sectionTitle}</div>`);
-                }
+<script>
+  function checkMCQ(qid){
+    const card = document.querySelector(`[data-qid="${qid}"]`);
+    const correct = card.getAttribute("data-answer");
+    const selected = document.querySelector(`input[name="${qid}"]:checked`);
 
-                const answers = [];
-                for (const letter in currentQuestion.answers) {
-                    answers.push(
-                        `<li>
-                            <label>
-                                <input type="radio" name="question${questionIndex}" value="${letter}">
-                                ${letter}) ${currentQuestion.answers[letter]}
-                            </label>
-                        </li>`
-                    );
-                }
-                output.push(
-                    `<div class="question" id="q${questionIndex}">
-                        <div class="question-number">Pregunta ${questionIndex + 1}</div>
-                        <div class="question-text">${currentQuestion.question}</div>
-                        <ul class="answers">${answers.join('')}</ul>
-                        <div class="feedback" id="fb${questionIndex}"></div>
-                    </div>`
-                );
-            });
-            quizForm.innerHTML = output.join('');
-        }
+    // Reset styles
+    card.querySelectorAll(".choice").forEach(li=>{
+      li.classList.remove("correct","wrong");
+    });
 
-        function showResults() {
-            const answerContainers = quizForm.querySelectorAll('.answers');
-            let numCorrect = 0;
+    const sol = document.getElementById(`sol-${qid}`);
+    sol.classList.remove("wrong");
 
-            quizData.forEach((currentQuestion, questionIndex) => {
-                const answerContainer = answerContainers[questionIndex];
-                const selector = `input[name=question${questionIndex}]:checked`;
-                const userAnswer = (answerContainer.querySelector(selector) || {}).value;
-                const feedbackEl = document.getElementById(`fb${questionIndex}`);
-                
-                feedbackEl.style.display = 'none';
-                feedbackEl.classList.remove('correct', 'incorrect');
+    if(!selected){
+      sol.style.display = "block";
+      sol.classList.add("wrong");
+      sol.innerHTML = `<span class="explanation-title">Falta elegir una opción</span>
+        Selecciona una respuesta y vuelve a presionar <strong>Verificar</strong>.`;
+      return;
+    }
 
-                if (userAnswer === currentQuestion.correctAnswer) {
-                    numCorrect++;
-                    feedbackEl.innerHTML = `<strong>¡Correcto!</strong> ${currentQuestion.rationale}`;
-                    feedbackEl.classList.add('correct');
-                } else {
-                    const correctTxt = currentQuestion.answers[currentQuestion.correctAnswer];
-                    feedbackEl.innerHTML = `<strong>Incorrecto.</strong> La respuesta era: <em>${currentQuestion.correctAnswer})</em>.<br><br><strong>Explicación:</strong> ${currentQuestion.rationale}`;
-                    feedbackEl.classList.add('incorrect');
-                }
-                feedbackEl.style.display = 'block';
-            });
+    const val = selected.value;
+    const choiceLi = selected.closest(".choice");
+    const correctLi = card.querySelector(`input[name="${qid}"][value="${correct}"]`).closest(".choice");
 
-            resultsContainer.innerHTML = `Puntaje Final: ${numCorrect} de ${quizData.length}`;
-            resultsContainer.style.display = 'block';
-            
-            // Scroll suave hacia los resultados
-            resultsContainer.scrollIntoView({ behavior: 'smooth' });
-        }
-    </script>
+    if(val === correct){
+      choiceLi.classList.add("correct");
+      sol.style.display = "block";
+    }else{
+      choiceLi.classList.add("wrong");
+      correctLi.classList.add("correct");
+      sol.style.display = "block";
+      sol.classList.add("wrong");
+    }
+
+    if(window.MathJax && window.MathJax.typeset){
+      window.MathJax.typeset();
+    }
+  }
+</script>
+
 </body>
 </html>
